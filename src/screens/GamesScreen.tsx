@@ -1,23 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import StatusBarRow from '../components/StatusBarRow';
+import AppIcon, { AppIconName } from '../components/AppIcon';
 import { colors, fonts, shadows } from '../theme';
+import { useChild } from '../hooks/useChild';
+import { api, expProgress } from '../lib/api';
 
 const GAMES = [
-  { emoji: '🔤', title: 'Үсэг тааруулах', sub: 'Үсгийг авиатай тааруул', grad: ['#7A6AA8', '#8B7AB8'] },
-  { emoji: '🧱', title: 'Үг угсрах', sub: 'Энгийн үг угсар', grad: ['#7A9E74', '#8FB487'] },
-  { emoji: '🕵️', title: 'Авианы мөрдөгч', sub: 'Сонсоод үсгийг сонго', grad: ['#6094A8', '#7AAEC0'] },
-  { emoji: '🖼️', title: 'Зураг тааруулах', sub: 'Зургийг үгтэй тааруул', grad: ['#B87060', '#C47870'] },
-];
-
-const STATS: [string, string, string][] = [
-  ['⭐ 24', 'Од', colors.sand.lightest],
-  ['🪙 80', 'Зоос', colors.sand.light],
-  ['🏅 3', 'Тэмдэг', colors.lavender.light],
+  { emoji: '🔤', title: 'Үсэг тааруулах', sub: 'Үсгийг авиатай тааруул', grad: ['#7A6AA8', '#8B7AB8'], coins: 15, exp: 20 },
+  { emoji: '🧱', title: 'Үг угсрах', sub: 'Энгийн үг угсар', grad: ['#7A9E74', '#8FB487'], coins: 15, exp: 20 },
+  { emoji: '🕵️', title: 'Авианы мөрдөгч', sub: 'Сонсоод үсгийг сонго', grad: ['#6094A8', '#7AAEC0'], coins: 15, exp: 20 },
 ];
 
 export default function GamesScreen() {
+  const { child, refresh } = useChild();
+  const [busy, setBusy] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const { level, current, needed } = expProgress(child?.exp ?? 0);
+
+  const award = async (coins: number, exp: number, label: string) => {
+    if (!child?.clerkId || busy) return;
+    setBusy(true);
+    try {
+      await api.reward(child.clerkId, { coins, exp });
+      await refresh();
+      setToast(`${label}: +${exp} EXP, +${coins} 🪙`);
+      setTimeout(() => setToast(null), 2500);
+    } catch (e) {
+      console.warn('Шагнал олгоход алдаа:', e);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const stats: { icon: AppIconName; color: string; val: string; label: string; bg: string }[] = [
+    { icon: 'star', color: '#F5B945', val: String(child?.stars ?? 0), label: 'Од', bg: colors.sand.lightest },
+    { icon: 'coin', color: '#E0A82E', val: String(child?.coins ?? 0), label: 'Зоос', bg: colors.sand.light },
+    { icon: 'medal', color: colors.lavender.dark, val: String(level), label: 'Түвшин', bg: colors.lavender.light },
+  ];
+
   return (
     <View style={styles.root}>
       <StatusBarRow />
@@ -27,18 +50,45 @@ export default function GamesScreen() {
 
         {/* Stats */}
         <View style={styles.statsRow}>
-          {STATS.map(([val, label, bg]) => (
+          {stats.map(({ icon, color, val, label, bg }) => (
             <View key={label} style={[styles.statCard, { backgroundColor: bg }]}>
-              <Text style={styles.statVal}>{val}</Text>
+              <View style={styles.statValRow}>
+                <AppIcon name={icon} size={18} color={color} />
+                <Text style={styles.statVal}>{val}</Text>
+              </View>
               <Text style={styles.statLabel}>{label}</Text>
             </View>
           ))}
         </View>
 
+        {/* EXP progress to next level */}
+        <View style={styles.expCard}>
+          <View style={styles.expHead}>
+            <Text style={styles.expLabel}>Туршлага (EXP)</Text>
+            <Text style={styles.expValue}>{current} / {needed}</Text>
+          </View>
+          <View style={styles.expBar}>
+            <View style={[styles.expFill, { width: `${(current / needed) * 100}%` }]} />
+          </View>
+          <Text style={styles.expHint}>{needed - current} EXP дараагийн түвшинд</Text>
+        </View>
+
+        {toast && (
+          <View style={styles.toast}>
+            <AppIcon name="party" size={16} color={colors.sage.text} />
+            <Text style={styles.toastText}>{toast}</Text>
+          </View>
+        )}
+
         {/* Game grid */}
         <View style={styles.grid}>
-          {GAMES.map(({ emoji, title, sub, grad }) => (
-            <Pressable key={title} style={styles.gameCard}>
+          {GAMES.map(({ emoji, title, sub, grad, coins, exp }) => (
+            <Pressable
+              key={title}
+              style={styles.gameCard}
+              disabled={busy}
+              onPress={() => award(coins, exp, title)}
+            >
               <LinearGradient
                 colors={grad as [string, string]}
                 start={{ x: 0, y: 0 }}
@@ -50,22 +100,23 @@ export default function GamesScreen() {
                   <Text style={styles.gameTitle}>{title}</Text>
                   <Text style={styles.gameSub}>{sub}</Text>
                 </View>
+                <Text style={styles.gameReward}>+{exp} EXP</Text>
               </LinearGradient>
             </Pressable>
           ))}
         </View>
 
         {/* Daily challenge */}
-        <View style={styles.challenge}>
-          <Text style={{ fontSize: 28 }}>🎉</Text>
+        <Pressable style={styles.challenge} disabled={busy} onPress={() => award(30, 50, 'Өдрийн сорил')}>
+          <AppIcon name="party" size={28} color={colors.peach.dark} />
           <View style={{ flex: 1 }}>
             <Text style={styles.challengeTitle}>Өдрийн сорил</Text>
-            <Text style={styles.challengeSub}>10 ⭐ хожоод баярла!</Text>
+            <Text style={styles.challengeSub}>+50 EXP, +30 🪙 хож!</Text>
           </View>
           <View style={styles.challengeBtn}>
             <Text style={styles.challengeBtnText}>Тоглох</Text>
           </View>
-        </View>
+        </Pressable>
       </ScrollView>
     </View>
   );
@@ -78,14 +129,25 @@ const styles = StyleSheet.create({
   subtitle: { fontFamily: fonts.lexend.regular, fontSize: 14, color: colors.warm.gray },
   statsRow: { flexDirection: 'row', gap: 8, marginTop: 16 },
   statCard: { flex: 1, borderRadius: 16, padding: 10, alignItems: 'center' },
+  statValRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   statVal: { fontFamily: fonts.fredoka.bold, fontSize: 18, color: colors.warm.text },
   statLabel: { fontFamily: fonts.lexend.regular, fontSize: 10, color: colors.warm.gray },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 16 },
-  gameCard: { width: '48%', height: 144, borderRadius: 24, marginBottom: 12, overflow: 'hidden', ...shadows.lavender },
-  gameInner: { flex: 1, padding: 16 },
-  gameTextWrap: { position: 'absolute', bottom: 12, left: 16, right: 16 },
-  gameTitle: { fontFamily: fonts.fredoka.semibold, fontSize: 16, color: '#fff' },
-  gameSub: { fontFamily: fonts.lexend.regular, fontSize: 11, color: 'rgba(255,255,255,0.8)' },
+  expCard: { backgroundColor: colors.warm.card, borderRadius: 16, padding: 14, marginTop: 12, ...shadows.card },
+  expHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  expLabel: { fontFamily: fonts.fredoka.semibold, fontSize: 13, color: colors.warm.text },
+  expValue: { fontFamily: fonts.lexend.semibold, fontSize: 12, color: colors.lavender.dark },
+  expBar: { height: 10, backgroundColor: colors.warm.secondary, borderRadius: 5, overflow: 'hidden', marginTop: 8 },
+  expFill: { height: '100%', backgroundColor: colors.lavender.mid, borderRadius: 5 },
+  expHint: { fontFamily: fonts.lexend.regular, fontSize: 10, color: colors.warm.gray, marginTop: 6 },
+  toast: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: colors.sage.light, borderRadius: 14, paddingVertical: 10, paddingHorizontal: 14, marginTop: 12 },
+  toastText: { fontFamily: fonts.lexend.semibold, fontSize: 13, color: colors.sage.text, textAlign: 'center' },
+  gameReward: { position: 'absolute', top: 14, right: 16, fontFamily: fonts.fredoka.semibold, fontSize: 12, color: 'rgba(255,255,255,0.9)' },
+  grid: { marginTop: 16 },
+  gameCard: { width: '100%', borderRadius: 24, marginBottom: 12, overflow: 'hidden', ...shadows.lavender },
+  gameInner: { flexDirection: 'row', alignItems: 'center', gap: 16, padding: 20 },
+  gameTextWrap: { flex: 1 },
+  gameTitle: { fontFamily: fonts.fredoka.semibold, fontSize: 18, color: '#fff' },
+  gameSub: { fontFamily: fonts.lexend.regular, fontSize: 12, color: 'rgba(255,255,255,0.8)', marginTop: 2 },
   challenge: {
     marginTop: 16,
     borderRadius: 24,

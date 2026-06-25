@@ -59,6 +59,7 @@ export type Child = {
   stars: number;
   streak: number;
   coins: number;
+  exp: number;
   dyslexiaTestDone: boolean;
   dyslexiaScore: number | null;
   dyslexiaRisk: string | null;
@@ -67,6 +68,17 @@ export type Child = {
 };
 
 export type DyslexiaRisk = 'low' | 'medium' | 'high';
+
+// Туршлагын оноо (exp) → түвшин ба прогресс. Server-тэй ижил логик (100 exp = 1 түвшин).
+export const EXP_PER_LEVEL = 100;
+export function expProgress(exp: number) {
+  const safe = Math.max(0, exp || 0);
+  return {
+    level: Math.floor(safe / EXP_PER_LEVEL) + 1,
+    current: safe % EXP_PER_LEVEL, // одоогийн түвшин дэх exp
+    needed: EXP_PER_LEVEL,
+  };
+}
 
 // Тест дуусахад илгээх даалгавар бүрийн хариу.
 export type DyslexiaAnswer = { type: string; correct: boolean };
@@ -97,8 +109,15 @@ export const api = {
     clerkId: string,
     data: { accuracy: number; durationMin: number; wordsRead: number; lessonId?: string }
   ) =>
-    request<{ session: unknown; child: Child; earnedStars: number }>(
+    request<{ session: unknown; child: Child; earnedStars: number; earnedCoins: number; earnedExp: number }>(
       `/api/me/${clerkId}/reading-session`,
+      { method: 'POST', body: JSON.stringify(data) }
+    ),
+
+  // Тоглоом, өдрийн сорил зэрэгт coin/exp олгох.
+  reward: (clerkId: string, data: { coins?: number; exp?: number }) =>
+    request<{ child: Child; earnedCoins: number; earnedExp: number }>(
+      `/api/me/${clerkId}/reward`,
       { method: 'POST', body: JSON.stringify(data) }
     ),
 

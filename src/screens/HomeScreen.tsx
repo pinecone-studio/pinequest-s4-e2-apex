@@ -3,26 +3,33 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import StatusBarRow from '../components/StatusBarRow';
 import LexiBot from '../components/LexiBot';
+import AppIcon, { AppIconName } from '../components/AppIcon';
 import { colors, fonts, shadows } from '../theme';
 import { useChild } from '../hooks/useChild';
+import { expProgress } from '../lib/api';
 
-const cards = [
-  { to: 'Reading', bg: colors.sand.lightest, icon: '📖', title: 'Унших эхлэх', sub: '12-оос 6-р хичээл' },
-  { to: 'Stories', bg: colors.sage.light, icon: '🎧', title: 'Сонсож сур', sub: 'Шинэ дуу' },
-  { to: 'Games', bg: colors.peach.lightest, icon: '🎮', title: 'Сургалтын тоглоом', sub: '4 хөгжилтэй тоглоом' },
-  { to: 'Stories', bg: colors.slate.light, icon: '📚', title: 'Үлгэрийн ертөнц', sub: '12 үлгэр' },
-  { to: 'DyslexiaTest', bg: colors.lavender.lightest, icon: '🧠', title: 'Дислекси шалгалт', sub: '5 мин · 4-7 нас' },
+const cards: { to: string; bg: string; icon: AppIconName; color: string; title: string; sub: string }[] = [
+  { to: 'Reading', bg: colors.sand.lightest, icon: 'book', color: '#A8895F', title: 'Унших эхлэх', sub: '12-оос 6-р хичээл' },
+  { to: 'Games', bg: colors.peach.lightest, icon: 'game', color: colors.peach.dark, title: 'Сургалтын тоглоом', sub: '4 хөгжилтэй тоглоом' },
+  { to: 'Stories', bg: colors.slate.light, icon: 'library', color: colors.slate.dark, title: 'Үлгэрийн ертөнц', sub: '12 үлгэр' },
+  { to: 'DyslexiaTest', bg: colors.lavender.lightest, icon: 'brain', color: colors.lavender.dark, title: 'Дислекси шалгалт', sub: '5 мин · 4-7 нас' },
+];
+
+const STAT_ICONS: { icon: AppIconName; color: string }[] = [
+  { icon: 'star', color: '#F5B945' },
+  { icon: 'coin', color: '#E0A82E' },
+  { icon: 'flame', color: '#E8835A' },
 ];
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const { child } = useChild();
 
-  const unlockedBadges = child?.badges.filter((b) => b.unlocked).length ?? 0;
-  const stats: [string, string, string][] = [
-    ['⭐', String(child?.stars ?? 0), 'Од'],
-    ['🔥', String(child?.streak ?? 0), 'Тасралтгүй өдөр'],
-    ['🏅', String(unlockedBadges), 'Тэмдэг'],
+  const stats: [string, string][] = [
+    [String(child?.stars ?? 0), 'Од'],
+    [String(child?.coins ?? 0), 'Зоос'],
+    [String(child?.streak ?? 0), 'Дараалал'],
   ];
+  const { level, current, needed } = expProgress(child?.exp ?? 0);
 
   return (
     <View style={styles.root}>
@@ -32,7 +39,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         <View style={styles.greetRow}>
           <View>
             <Text style={styles.greetHi}>Сайн уу,</Text>
-            <Text style={styles.greetName}>{child?.name ?? '...'}! 👋</Text>
+            <Text style={styles.greetName}>{child?.name ?? '...'}!</Text>
           </View>
           <LinearGradient colors={['#D8C4B0', '#C4A08C']} style={styles.avatar}>
             <Text style={{ fontSize: 30 }}>{child?.avatar ?? '🦊'}</Text>
@@ -41,13 +48,27 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
         {/* Stats */}
         <View style={styles.statsRow}>
-          {stats.map(([emoji, val, label]) => (
+          {stats.map(([val, label], i) => (
             <View key={label} style={styles.statCard}>
-              <Text style={{ fontSize: 20 }}>{emoji}</Text>
+              <AppIcon name={STAT_ICONS[i].icon} size={20} color={STAT_ICONS[i].color} />
               <Text style={styles.statVal}>{val}</Text>
               <Text style={styles.statLabel}>{label}</Text>
             </View>
           ))}
+        </View>
+
+        {/* Level / EXP progress */}
+        <View style={styles.expCard}>
+          <View style={styles.expHead}>
+            <View style={styles.expLevelRow}>
+              <AppIcon name="medal" size={16} color={colors.lavender.dark} />
+              <Text style={styles.expLevel}>{level}-р түвшин</Text>
+            </View>
+            <Text style={styles.expValue}>{current} / {needed} EXP</Text>
+          </View>
+          <View style={styles.expBar}>
+            <View style={[styles.expFill, { width: `${(current / needed) * 100}%` }]} />
+          </View>
         </View>
 
         {/* AI Buddy banner */}
@@ -72,7 +93,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           {cards.map(({ to, icon, title, sub }, i) => (
             <Pressable key={i} style={styles.gridCard} onPress={() => navigation.navigate(to)}>
               <View style={[styles.gridIcon, { backgroundColor: colors.warm.beige }]}>
-                <Text style={{ fontSize: 22 }}>{icon}</Text>
+                <AppIcon name={icon} size={24} color={cards[i].color} />
               </View>
               <Text style={styles.gridTitle}>{title}</Text>
               <Text style={styles.gridSub}>{sub}</Text>
@@ -109,6 +130,13 @@ const styles = StyleSheet.create({
   },
   statVal: { fontFamily: fonts.fredoka.bold, fontSize: 20, color: colors.warm.text, marginTop: 2 },
   statLabel: { fontFamily: fonts.lexend.regular, fontSize: 11, color: colors.warm.gray },
+  expCard: { backgroundColor: colors.warm.card, borderRadius: 16, padding: 14, marginTop: 12, ...shadows.card },
+  expHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  expLevelRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  expLevel: { fontFamily: fonts.fredoka.semibold, fontSize: 14, color: colors.warm.text },
+  expValue: { fontFamily: fonts.lexend.semibold, fontSize: 12, color: colors.lavender.dark },
+  expBar: { height: 10, backgroundColor: colors.warm.secondary, borderRadius: 5, overflow: 'hidden' },
+  expFill: { height: '100%', backgroundColor: colors.lavender.mid, borderRadius: 5 },
   banner: {
     marginTop: 20,
     borderRadius: 24,

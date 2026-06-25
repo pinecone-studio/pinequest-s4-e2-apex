@@ -1,15 +1,18 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { colors, fonts } from '../theme';
 
-const META: Record<string, { emoji: string; label: string }> = {
-  Home: { emoji: '🏠', label: 'Нүүр' },
-  Stories: { emoji: '📚', label: 'Үлгэр' },
-  Games: { emoji: '🎮', label: 'Тоглоом' },
-  Parent: { emoji: '📊', label: 'Эцэг эх' },
-  Profile: { emoji: '👤', label: 'Профайл' },
+type IconName = React.ComponentProps<typeof Ionicons>['name'];
+
+const META: Record<string, { icon: IconName; label: string }> = {
+  Home: { icon: 'home', label: 'Нүүр' },
+  Stories: { icon: 'library', label: 'Үлгэр' },
+  Games: { icon: 'game-controller', label: 'Тоглоом' },
+  Parent: { icon: 'stats-chart', label: 'Эцэг эх' },
+  Profile: { icon: 'person', label: 'Профайл' },
 };
 
 /** Custom tab bar — ported from components/BottomNav.tsx. */
@@ -29,7 +32,11 @@ export default function BottomNav({ state, navigation }: BottomTabBarProps) {
 
         return (
           <Pressable key={route.key} style={styles.item} onPress={onPress}>
-            <Text style={[styles.emoji, !active && styles.emojiInactive]}>{meta.emoji}</Text>
+            <Ionicons
+              name={meta.icon}
+              size={24}
+              color={active ? colors.lavender.dark : colors.warm.lightgray}
+            />
             <Text style={[styles.label, active ? styles.labelActive : styles.labelInactive]}>{meta.label}</Text>
           </Pressable>
         );
@@ -54,8 +61,6 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   item: { alignItems: 'center', gap: 4 },
-  emoji: { fontSize: 22 },
-  emojiInactive: { opacity: 0.5 },
   label: { fontFamily: fonts.lexend.regular, fontSize: 10 },
   labelActive: { fontFamily: fonts.lexend.semibold, color: colors.lavender.dark },
   labelInactive: { color: colors.warm.lightgray },

@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import StatusBarRow from '../components/StatusBarRow';
+import AppIcon from '../components/AppIcon';
 import { colors, fonts, shadows } from '../theme';
 
 const CATS = ['🦄 Уран зөгнөл', '🐶 Амьтад', '🚀 Сансар', '🌳 Байгаль'];
 const LIST = [
-  { emoji: '🚀', bg: colors.slate.light, title: 'Сар луу нисье', level: '⭐⭐ Хялбар · Сансар' },
-  { emoji: '🦊', bg: colors.sage.light, title: 'Ойн үнэг', level: '⭐ Анхан шат · Амьтад' },
+  { emoji: '🚀', bg: colors.slate.light, title: 'Сар луу нисье', level: '★★ Хялбар · Сансар' },
+  { emoji: '🦊', bg: colors.sage.light, title: 'Ойн үнэг', level: '★ Анхан шат · Амьтад' },
 ];
 
 export default function StoriesScreen() {
@@ -16,7 +17,10 @@ export default function StoriesScreen() {
     <View style={styles.root}>
       <StatusBarRow />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Үлгэрийн ертөнц ✨</Text>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>Үлгэрийн ертөнц</Text>
+          <AppIcon name="sparkles" size={20} color="#E8B04A" />
+        </View>
         <Text style={styles.subtitle}>Уншихаар шидэт үлгэр сонго</Text>
 
         {/* Category chips */}
@@ -40,21 +44,28 @@ export default function StoriesScreen() {
 
         {/* Featured story */}
         <LinearGradient colors={['#8B7AB8', '#6A98B0']} style={styles.featured}>
-          <Text style={[styles.deco, { top: 12, right: 16 }]}>✨</Text>
+          <View style={[styles.deco, { top: 12, right: 16 }]}>
+            <AppIcon name="sparkles" size={18} color="#FFF0B8" />
+          </View>
           <View style={styles.featuredRow}>
             <View style={styles.featuredCover}>
               <Text style={{ fontSize: 48 }}>🐰</Text>
             </View>
             <View style={{ flex: 1 }}>
               <View style={styles.badge}>
-                <Text style={styles.badgeText}>⭐ Анхан шат</Text>
+                <AppIcon name="star" size={11} color="#F5D27A" />
+                <Text style={styles.badgeText}>Анхан шат</Text>
               </View>
               <Text style={styles.featuredTitle}>Зоригт бяцхан туулай</Text>
-              <Text style={styles.featuredMeta}>🎧 Дуутай · 5 мин</Text>
+              <View style={styles.metaRow}>
+                <AppIcon name="headset" size={13} color="rgba(255,255,255,0.8)" />
+                <Text style={styles.featuredMeta}>Дуутай · 5 мин</Text>
+              </View>
             </View>
           </View>
           <Pressable style={styles.featuredBtn}>
-            <Text style={styles.featuredBtnText}>▶ Хамтдаа унших</Text>
+            <AppIcon name="play" size={16} color={colors.warm.text} />
+            <Text style={styles.featuredBtnText}>Хамтдаа унших</Text>
           </Pressable>
         </LinearGradient>
 
@@ -73,7 +84,7 @@ export default function StoriesScreen() {
                 <Text style={styles.listItemTitle}>{title}</Text>
                 <Text style={styles.listItemLevel}>{level}</Text>
               </View>
-              <Text style={{ fontSize: 20 }}>🎧</Text>
+              <AppIcon name="headset" size={20} color={colors.lavender.dark} />
             </Pressable>
           ))}
         </View>
@@ -85,6 +96,7 @@ export default function StoriesScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.warm.beige },
   content: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 24 },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   title: { fontFamily: fonts.fredoka.bold, fontSize: 24, color: colors.warm.text },
   subtitle: { fontFamily: fonts.lexend.regular, fontSize: 14, color: colors.warm.gray },
   chipsRow: { gap: 8, marginTop: 16, paddingBottom: 4 },
@@ -104,11 +116,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...shadows.card,
   },
-  badge: { alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+  badge: { flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start', backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
   badgeText: { fontFamily: fonts.lexend.semibold, fontSize: 10, color: '#fff' },
   featuredTitle: { fontFamily: fonts.fredoka.bold, fontSize: 20, color: '#fff', marginTop: 8 },
-  featuredMeta: { fontFamily: fonts.lexend.regular, fontSize: 12, color: 'rgba(255,255,255,0.8)', marginTop: 4 },
-  featuredBtn: { marginTop: 16, backgroundColor: colors.sand.DEFAULT, paddingVertical: 12, borderRadius: 16, alignItems: 'center' },
+  metaRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 4 },
+  featuredMeta: { fontFamily: fonts.lexend.regular, fontSize: 12, color: 'rgba(255,255,255,0.8)' },
+  featuredBtn: { marginTop: 16, backgroundColor: colors.sand.DEFAULT, paddingVertical: 12, borderRadius: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
   featuredBtnText: { fontFamily: fonts.fredoka.semibold, fontSize: 16, color: colors.warm.text },
   listHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 },
   listTitle: { fontFamily: fonts.fredoka.semibold, fontSize: 16, color: colors.warm.text },

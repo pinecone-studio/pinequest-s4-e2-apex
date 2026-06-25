@@ -24,6 +24,7 @@ model Child {
   stars     Int      @default(0)
   streak    Int      @default(0)
   coins     Int      @default(0)
+  exp       Int      @default(0) // туршлагын оноо — цугларах тусам түвшин ахина
 
   // Lexi-AI дислекси урьдчилсан шалгалт (шинэ хэрэглэгч анх орж ирэхэд өгнө)
   dyslexiaTestDone   Boolean   @default(false)

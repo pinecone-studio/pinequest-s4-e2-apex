@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { LinearGradient } from 'expo-linear-gradient';
 import StatusBarRow from '../components/StatusBarRow';
+import AppIcon from '../components/AppIcon';
 import { colors, fonts, shadows } from '../theme';
 
 const WORDS = ['Муур', 'бөмбөгтэй', 'тоглох', 'дуртай.'];
@@ -19,11 +20,11 @@ export default function ReadingScreen({ navigation }: { navigation: any }) {
       {/* Header */}
       <View style={styles.header}>
         <Pressable style={styles.iconBtn} onPress={() => navigation.goBack()}>
-          <Text style={{ fontSize: 18 }}>←</Text>
+          <AppIcon name="arrowBack" size={20} color={colors.warm.text} />
         </Pressable>
         <Text style={styles.headerTitle}>Унших хичээл</Text>
         <View style={[styles.iconBtn, { backgroundColor: colors.lavender.light }]}>
-          <Text style={{ fontSize: 18 }}>⚙️</Text>
+          <AppIcon name="settings" size={18} color={colors.lavender.dark} />
         </View>
       </View>
       <Text style={styles.subtitle}>6-р хичээл · «М» үсэг</Text>
@@ -31,8 +32,12 @@ export default function ReadingScreen({ navigation }: { navigation: any }) {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* Illustration */}
         <LinearGradient colors={['#F5EAD8', '#EDD8C6']} style={styles.illustration}>
-          <Text style={[styles.decoSmall, { top: 16, left: 24 }]}>✨</Text>
-          <Text style={[styles.decoSmall, { bottom: 20, right: 28 }]}>⭐</Text>
+          <View style={[styles.decoSmall, { top: 16, left: 24 }]}>
+            <AppIcon name="sparkles" size={16} color="#E8B04A" />
+          </View>
+          <View style={[styles.decoSmall, { bottom: 20, right: 28 }]}>
+            <AppIcon name="star" size={16} color="#F5B945" />
+          </View>
           <Text style={{ fontSize: 100 }}>🐱</Text>
           <Text style={styles.illustrationWord}>Муур</Text>
           <Text style={styles.illustrationPhon}>М · уу · р</Text>
@@ -90,13 +95,15 @@ export default function ReadingScreen({ navigation }: { navigation: any }) {
       {/* Buttons */}
       <View style={styles.actions}>
         <Pressable style={[styles.actionBtn, { backgroundColor: colors.slate.mid }]}>
-          <Text style={styles.actionText}>🔊 Сонсох</Text>
+          <AppIcon name="volume" size={18} color="#fff" />
+          <Text style={styles.actionText}>Сонсох</Text>
         </Pressable>
         <Pressable style={[styles.actionBtn, { backgroundColor: colors.peach.dark }]}>
-          <Text style={styles.actionText}>🎙️ Унших</Text>
+          <AppIcon name="mic" size={18} color="#fff" />
+          <Text style={styles.actionText}>Унших</Text>
         </Pressable>
         <Pressable style={styles.nextBtn}>
-          <Text style={{ fontSize: 20 }}>➡️</Text>
+          <AppIcon name="arrowForward" size={22} color="#fff" />
         </Pressable>
       </View>
     </View>
@@ -172,7 +179,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
   },
-  actionBtn: { flex: 1, borderRadius: 24, paddingVertical: 16, alignItems: 'center', ...shadows.card },
+  actionBtn: { flex: 1, borderRadius: 24, paddingVertical: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, ...shadows.card },
   actionText: { fontFamily: fonts.fredoka.semibold, fontSize: 16, color: '#fff' },
   nextBtn: {
     width: 56,

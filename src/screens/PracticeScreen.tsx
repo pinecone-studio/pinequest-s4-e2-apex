@@ -3,9 +3,11 @@ import { View, Text, StyleSheet, Pressable, Animated, Easing, ScrollView } from 
 import { LinearGradient } from 'expo-linear-gradient';
 import StatusBarRow from '../components/StatusBarRow';
 import LexiBot from '../components/LexiBot';
+import AppIcon from '../components/AppIcon';
 import { colors, fonts, shadows } from '../theme';
 import { useChild } from '../hooks/useChild';
 import { SKILL_AREAS, normalizeWeakAreas } from '../lib/dyslexia';
+import { api } from '../lib/api';
 
 const BARS = [
   { h: 18, color: '#9B8BC4' },
@@ -53,16 +55,31 @@ function WaveBar({ height, color, listening, delay }: { height: number; color: s
 export default function PracticeScreen({ navigation }: { navigation: any }) {
   const [listening, setListening] = useState(false);
   const [done, setDone] = useState(false);
-  const { child } = useChild();
+  const [earned, setEarned] = useState<{ stars: number; coins: number; exp: number } | null>(null);
+  const { child, refresh } = useChild();
 
   // Дислекси шалгалтаар илэрсэн сул ур чадварт хичээлийг тааруулна.
   const weakAreas = normalizeWeakAreas(child?.dyslexiaWeakSkills);
 
   const handleMic = () => {
     setListening(true);
-    setTimeout(() => {
+    setTimeout(async () => {
       setListening(false);
       setDone(true);
+      // Дасгалыг бодитоор бүртгэж, exp + coin + од олгоно.
+      if (child?.clerkId) {
+        try {
+          const r = await api.recordReadingSession(child.clerkId, {
+            accuracy: 90,
+            durationMin: 1,
+            wordsRead: 9,
+          });
+          setEarned({ stars: r.earnedStars, coins: r.earnedCoins, exp: r.earnedExp });
+          refresh();
+        } catch (e) {
+          console.warn('Дасгал бүртгэхэд алдаа:', e);
+        }
+      }
     }, 3000);
   };
 
@@ -116,7 +133,7 @@ export default function PracticeScreen({ navigation }: { navigation: any }) {
         <View style={{ alignItems: 'center', marginTop: 16 }}>
           <Pressable onPress={handleMic} style={styles.micWrap}>
             <LinearGradient colors={['#C4876A', '#D8A48F']} style={styles.mic}>
-              <Text style={{ fontSize: 36 }}>🎙️</Text>
+              <AppIcon name="mic" size={36} color="#fff" />
             </LinearGradient>
           </Pressable>
         </View>
@@ -126,21 +143,23 @@ export default function PracticeScreen({ navigation }: { navigation: any }) {
         {done && (
           <View style={styles.feedback}>
             <View style={styles.feedbackHead}>
-              <Text style={{ fontSize: 22 }}>🌟</Text>
+              <AppIcon name="star" size={22} color="#F5B945" />
               <Text style={styles.feedbackTitle}>Гайхалтай!</Text>
-              <Text style={styles.feedbackStar}>+3 ⭐</Text>
+              {earned && <Text style={styles.feedbackStar}>+{earned.stars} ⭐</Text>}
             </View>
             <Text style={styles.feedbackText}>
               Чи <Text style={{ fontFamily: fonts.lexend.bold }}>10-аас 9</Text> үгийг зөв уншлаа!
             </Text>
-            <View style={styles.feedbackChips}>
-              <View style={styles.chipPeach}>
-                <Text style={styles.chipPeachText}>«р» дасгал</Text>
+            {earned && (
+              <View style={styles.feedbackChips}>
+                <View style={styles.chipPeach}>
+                  <Text style={styles.chipPeachText}>+{earned.exp} EXP</Text>
+                </View>
+                <View style={styles.chipSlate}>
+                  <Text style={styles.chipSlateText}>+{earned.coins} 🪙</Text>
+                </View>
               </View>
-              <View style={styles.chipSlate}>
-                <Text style={styles.chipSlateText}>«ш» дасгал</Text>
-              </View>
-            </View>
+            )}
           </View>
         )}
 

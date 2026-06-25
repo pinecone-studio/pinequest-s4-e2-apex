@@ -1519,6 +1519,7 @@ export namespace Prisma {
     stars: number | null
     streak: number | null
     coins: number | null
+    exp: number | null
     dyslexiaScore: number | null
   }
 
@@ -1527,6 +1528,7 @@ export namespace Prisma {
     stars: number | null
     streak: number | null
     coins: number | null
+    exp: number | null
     dyslexiaScore: number | null
   }
 
@@ -1541,6 +1543,7 @@ export namespace Prisma {
     stars: number | null
     streak: number | null
     coins: number | null
+    exp: number | null
     dyslexiaTestDone: boolean | null
     dyslexiaScore: number | null
     dyslexiaRisk: string | null
@@ -1560,6 +1563,7 @@ export namespace Prisma {
     stars: number | null
     streak: number | null
     coins: number | null
+    exp: number | null
     dyslexiaTestDone: boolean | null
     dyslexiaScore: number | null
     dyslexiaRisk: string | null
@@ -1579,6 +1583,7 @@ export namespace Prisma {
     stars: number
     streak: number
     coins: number
+    exp: number
     dyslexiaTestDone: number
     dyslexiaScore: number
     dyslexiaRisk: number
@@ -1595,6 +1600,7 @@ export namespace Prisma {
     stars?: true
     streak?: true
     coins?: true
+    exp?: true
     dyslexiaScore?: true
   }
 
@@ -1603,6 +1609,7 @@ export namespace Prisma {
     stars?: true
     streak?: true
     coins?: true
+    exp?: true
     dyslexiaScore?: true
   }
 
@@ -1617,6 +1624,7 @@ export namespace Prisma {
     stars?: true
     streak?: true
     coins?: true
+    exp?: true
     dyslexiaTestDone?: true
     dyslexiaScore?: true
     dyslexiaRisk?: true
@@ -1636,6 +1644,7 @@ export namespace Prisma {
     stars?: true
     streak?: true
     coins?: true
+    exp?: true
     dyslexiaTestDone?: true
     dyslexiaScore?: true
     dyslexiaRisk?: true
@@ -1655,6 +1664,7 @@ export namespace Prisma {
     stars?: true
     streak?: true
     coins?: true
+    exp?: true
     dyslexiaTestDone?: true
     dyslexiaScore?: true
     dyslexiaRisk?: true
@@ -1762,6 +1772,7 @@ export namespace Prisma {
     stars: number
     streak: number
     coins: number
+    exp: number
     dyslexiaTestDone: boolean
     dyslexiaScore: number | null
     dyslexiaRisk: string | null
@@ -1801,6 +1812,7 @@ export namespace Prisma {
     stars?: boolean
     streak?: boolean
     coins?: boolean
+    exp?: boolean
     dyslexiaTestDone?: boolean
     dyslexiaScore?: boolean
     dyslexiaRisk?: boolean
@@ -1826,6 +1838,7 @@ export namespace Prisma {
     stars?: boolean
     streak?: boolean
     coins?: boolean
+    exp?: boolean
     dyslexiaTestDone?: boolean
     dyslexiaScore?: boolean
     dyslexiaRisk?: boolean
@@ -1846,6 +1859,7 @@ export namespace Prisma {
     stars?: boolean
     streak?: boolean
     coins?: boolean
+    exp?: boolean
     dyslexiaTestDone?: boolean
     dyslexiaScore?: boolean
     dyslexiaRisk?: boolean
@@ -1883,6 +1897,7 @@ export namespace Prisma {
       stars: number
       streak: number
       coins: number
+      exp: number
       dyslexiaTestDone: boolean
       dyslexiaScore: number | null
       dyslexiaRisk: string | null
@@ -2297,6 +2312,7 @@ export namespace Prisma {
     readonly stars: FieldRef<"Child", 'Int'>
     readonly streak: FieldRef<"Child", 'Int'>
     readonly coins: FieldRef<"Child", 'Int'>
+    readonly exp: FieldRef<"Child", 'Int'>
     readonly dyslexiaTestDone: FieldRef<"Child", 'Boolean'>
     readonly dyslexiaScore: FieldRef<"Child", 'Int'>
     readonly dyslexiaRisk: FieldRef<"Child", 'String'>
@@ -9357,6 +9373,7 @@ export namespace Prisma {
     stars: 'stars',
     streak: 'streak',
     coins: 'coins',
+    exp: 'exp',
     dyslexiaTestDone: 'dyslexiaTestDone',
     dyslexiaScore: 'dyslexiaScore',
     dyslexiaRisk: 'dyslexiaRisk',
@@ -9585,6 +9602,7 @@ export namespace Prisma {
     stars?: IntFilter<"Child"> | number
     streak?: IntFilter<"Child"> | number
     coins?: IntFilter<"Child"> | number
+    exp?: IntFilter<"Child"> | number
     dyslexiaTestDone?: BoolFilter<"Child"> | boolean
     dyslexiaScore?: IntNullableFilter<"Child"> | number | null
     dyslexiaRisk?: StringNullableFilter<"Child"> | string | null
@@ -9609,6 +9627,7 @@ export namespace Prisma {
     stars?: SortOrder
     streak?: SortOrder
     coins?: SortOrder
+    exp?: SortOrder
     dyslexiaTestDone?: SortOrder
     dyslexiaScore?: SortOrderInput | SortOrder
     dyslexiaRisk?: SortOrderInput | SortOrder
@@ -9636,6 +9655,7 @@ export namespace Prisma {
     stars?: IntFilter<"Child"> | number
     streak?: IntFilter<"Child"> | number
     coins?: IntFilter<"Child"> | number
+    exp?: IntFilter<"Child"> | number
     dyslexiaTestDone?: BoolFilter<"Child"> | boolean
     dyslexiaScore?: IntNullableFilter<"Child"> | number | null
     dyslexiaRisk?: StringNullableFilter<"Child"> | string | null
@@ -9660,6 +9680,7 @@ export namespace Prisma {
     stars?: SortOrder
     streak?: SortOrder
     coins?: SortOrder
+    exp?: SortOrder
     dyslexiaTestDone?: SortOrder
     dyslexiaScore?: SortOrderInput | SortOrder
     dyslexiaRisk?: SortOrderInput | SortOrder
@@ -9688,6 +9709,7 @@ export namespace Prisma {
     stars?: IntWithAggregatesFilter<"Child"> | number
     streak?: IntWithAggregatesFilter<"Child"> | number
     coins?: IntWithAggregatesFilter<"Child"> | number
+    exp?: IntWithAggregatesFilter<"Child"> | number
     dyslexiaTestDone?: BoolWithAggregatesFilter<"Child"> | boolean
     dyslexiaScore?: IntNullableWithAggregatesFilter<"Child"> | number | null
     dyslexiaRisk?: StringNullableWithAggregatesFilter<"Child"> | string | null
@@ -10130,6 +10152,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -10154,6 +10177,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -10178,6 +10202,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10202,6 +10227,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10226,6 +10252,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -10246,6 +10273,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10266,6 +10294,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10855,6 +10884,7 @@ export namespace Prisma {
     stars?: SortOrder
     streak?: SortOrder
     coins?: SortOrder
+    exp?: SortOrder
     dyslexiaTestDone?: SortOrder
     dyslexiaScore?: SortOrder
     dyslexiaRisk?: SortOrder
@@ -10869,6 +10899,7 @@ export namespace Prisma {
     stars?: SortOrder
     streak?: SortOrder
     coins?: SortOrder
+    exp?: SortOrder
     dyslexiaScore?: SortOrder
   }
 
@@ -10883,6 +10914,7 @@ export namespace Prisma {
     stars?: SortOrder
     streak?: SortOrder
     coins?: SortOrder
+    exp?: SortOrder
     dyslexiaTestDone?: SortOrder
     dyslexiaScore?: SortOrder
     dyslexiaRisk?: SortOrder
@@ -10902,6 +10934,7 @@ export namespace Prisma {
     stars?: SortOrder
     streak?: SortOrder
     coins?: SortOrder
+    exp?: SortOrder
     dyslexiaTestDone?: SortOrder
     dyslexiaScore?: SortOrder
     dyslexiaRisk?: SortOrder
@@ -10915,6 +10948,7 @@ export namespace Prisma {
     stars?: SortOrder
     streak?: SortOrder
     coins?: SortOrder
+    exp?: SortOrder
     dyslexiaScore?: SortOrder
   }
 
@@ -12090,6 +12124,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -12113,6 +12148,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -12152,6 +12188,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12175,6 +12212,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12198,6 +12236,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -12221,6 +12260,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -12260,6 +12300,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12283,6 +12324,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12306,6 +12348,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -12329,6 +12372,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -12368,6 +12412,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12391,6 +12436,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12414,6 +12460,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -12437,6 +12484,7 @@ export namespace Prisma {
     stars?: number
     streak?: number
     coins?: number
+    exp?: number
     dyslexiaTestDone?: boolean
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
@@ -12476,6 +12524,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12499,6 +12548,7 @@ export namespace Prisma {
     stars?: IntFieldUpdateOperationsInput | number
     streak?: IntFieldUpdateOperationsInput | number
     coins?: IntFieldUpdateOperationsInput | number
+    exp?: IntFieldUpdateOperationsInput | number
     dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null

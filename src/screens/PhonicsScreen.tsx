@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import StatusBarRow from '../components/StatusBarRow';
+import AppIcon, { AppIconName } from '../components/AppIcon';
 import { colors, fonts, shadows } from '../theme';
 
 const TABS = ['Үсэг', 'Авиа', 'Холих', 'Үг'];
-const ACTIVITIES = [
-  { emoji: '👂', label: 'Сонс', bg: colors.sage.light, text: colors.sage.text },
-  { emoji: '🔁', label: 'Давт', bg: colors.lavender.light, text: colors.lavender.dark },
-  { emoji: '🧩', label: 'Тааруул', bg: colors.sand.lightest, text: '#8A7860' },
-  { emoji: '✋', label: 'Чирэх', bg: colors.slate.light, text: colors.slate.dark },
-  { emoji: '🗣️', label: 'Хэл', bg: colors.peach.lightest, text: colors.peach.dark },
+const ACTIVITIES: { icon: AppIconName; label: string; bg: string; text: string }[] = [
+  { icon: 'ear', label: 'Сонс', bg: colors.sage.light, text: colors.sage.text },
+  { icon: 'repeat', label: 'Давт', bg: colors.lavender.light, text: colors.lavender.dark },
+  { icon: 'puzzle', label: 'Тааруул', bg: colors.sand.lightest, text: '#8A7860' },
+  { icon: 'drag', label: 'Чирэх', bg: colors.slate.light, text: colors.slate.dark },
+  { icon: 'voice', label: 'Хэл', bg: colors.peach.lightest, text: colors.peach.dark },
 ];
 
 export default function PhonicsScreen() {
@@ -19,7 +20,10 @@ export default function PhonicsScreen() {
     <View style={styles.root}>
       <StatusBarRow />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Авиа дасгалжуулагч 🧠</Text>
+        <View style={styles.titleRow}>
+          <AppIcon name="brain" size={22} color={colors.lavender.dark} />
+          <Text style={styles.title}>Авиа дасгалжуулагч</Text>
+        </View>
 
         <View style={styles.tabs}>
           {TABS.map((t, i) => (
@@ -42,16 +46,16 @@ export default function PhonicsScreen() {
             жишээ нь <Text style={{ fontFamily: fonts.lexend.bold }}>шувуу</Text> 🐦
           </Text>
           <Pressable style={styles.heroBtn}>
-            <Text style={{ fontSize: 20 }}>🔊</Text>
+            <AppIcon name="volume" size={20} color={colors.peach.dark} />
             <Text style={styles.heroBtnText}>Авиаг сонс</Text>
           </Pressable>
         </LinearGradient>
 
         <Text style={styles.sectionTitle}>Дасгалууд</Text>
         <View style={styles.activities}>
-          {ACTIVITIES.map(({ emoji, label, bg, text }) => (
+          {ACTIVITIES.map(({ icon, label, bg, text }) => (
             <Pressable key={label} style={[styles.activity, { backgroundColor: bg }]}>
-              <Text style={{ fontSize: 20 }}>{emoji}</Text>
+              <AppIcon name={icon} size={22} color={text} />
               <Text style={[styles.activityLabel, { color: text }]}>{label}</Text>
             </Pressable>
           ))}
@@ -85,6 +89,7 @@ export default function PhonicsScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.warm.beige },
   content: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 110 },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   title: { fontFamily: fonts.fredoka.bold, fontSize: 24, color: colors.warm.text },
   tabs: { flexDirection: 'row', gap: 8, marginTop: 16 },
   tab: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16 },

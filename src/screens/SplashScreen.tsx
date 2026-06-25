@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Animated, Easing } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import LexiBot from '../components/LexiBot';
+import AppIcon from '../components/AppIcon';
 import { colors, fonts, shadows } from '../theme';
 import { useChild } from '../hooks/useChild';
 
@@ -40,17 +41,27 @@ export default function SplashScreen({ navigation }: { navigation: any }) {
   return (
     <LinearGradient colors={['#F0E6D8', '#FAF0E8', '#FFFDF8']} style={styles.container}>
       {/* Decorations */}
-      <Text style={[styles.deco, { top: 112, left: 32, fontSize: 24 }]}>✨</Text>
-      <Text style={[styles.deco, { top: 208, right: 40, fontSize: 20 }]}>⭐</Text>
-      <Text style={[styles.deco, { top: 320, left: 48, fontSize: 18 }]}>✨</Text>
-      <Text style={[styles.deco, { top: 96, right: 32, fontSize: 30 }]}>☁️</Text>
-      <Text style={[styles.deco, { top: 256, left: 16, fontSize: 24 }]}>☁️</Text>
+      <View style={[styles.deco, { top: 112, left: 32 }]}>
+        <AppIcon name="sparkles" size={24} color="#E8B04A" />
+      </View>
+      <View style={[styles.deco, { top: 208, right: 40 }]}>
+        <AppIcon name="star" size={20} color="#F5B945" />
+      </View>
+      <View style={[styles.deco, { top: 320, left: 48 }]}>
+        <AppIcon name="sparkles" size={18} color="#C4A8E0" />
+      </View>
+      <View style={[styles.deco, { top: 96, right: 32 }]}>
+        <AppIcon name="cloud" size={30} color="#CFE0EA" />
+      </View>
+      <View style={[styles.deco, { top: 256, left: 16 }]}>
+        <AppIcon name="cloud" size={24} color="#E0D8CC" />
+      </View>
 
       {/* Logo */}
       <View style={styles.logoWrap}>
         <View style={styles.logoCard}>
           <LinearGradient colors={['#E8D8C3', '#D8A48F']} style={styles.logoIcon}>
-            <Text style={{ fontSize: 24 }}>📖</Text>
+            <AppIcon name="book" size={24} color="#fff" />
           </LinearGradient>
           <Text style={styles.logoText}>
             LEXI <Text style={{ color: colors.peach.dark }}>AI</Text>

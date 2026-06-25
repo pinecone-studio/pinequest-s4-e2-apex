@@ -27,6 +27,10 @@ const DEFAULT_BADGES = [
 
 const childInclude = { badges: { orderBy: { id: 'asc' } } };
 
+// Туршлагын оноо (exp) → түвшин. Түвшин бүрд 100 exp хэрэгтэй.
+const EXP_PER_LEVEL = 100;
+const levelForExp = (exp) => Math.floor((exp || 0) / EXP_PER_LEVEL) + 1;
+
 // Small async wrapper so route handlers can throw and we still return JSON 500s.
 const wrap = (fn) => (req, res) =>
   Promise.resolve(fn(req, res)).catch((err) => {
@@ -117,13 +121,45 @@ app.post(
     });
 
     const earnedStars = Math.max(1, Math.round(accuracy / 20)); // 0..100 → ~1..5
+    const earnedCoins = earnedStars * 2;
+    const earnedExp = Math.max(5, Math.round(accuracy / 5) + wordsRead); // нарийвчлал + уншсан үг
+    const newExp = (child.exp || 0) + earnedExp;
     const updated = await prisma.child.update({
       where: { id: child.id },
-      data: { stars: { increment: earnedStars }, coins: { increment: earnedStars } },
+      data: {
+        stars: { increment: earnedStars },
+        coins: { increment: earnedCoins },
+        exp: newExp,
+        level: levelForExp(newExp),
+      },
       include: childInclude,
     });
 
-    res.json({ session, child: updated, earnedStars });
+    res.json({ session, child: updated, earnedStars, earnedCoins, earnedExp });
+  })
+);
+
+// Generic reward — тоглоом, өдрийн сорил зэрэгт coin/exp олгох.
+app.post(
+  '/api/me/:clerkId/reward',
+  wrap(async (req, res) => {
+    const child = await prisma.child.findUnique({ where: { clerkId: req.params.clerkId } });
+    if (!child) return res.status(404).json({ error: 'not found' });
+
+    const coins = Math.max(0, Math.round(Number(req.body?.coins) || 0));
+    const exp = Math.max(0, Math.round(Number(req.body?.exp) || 0));
+    const newExp = (child.exp || 0) + exp;
+    const updated = await prisma.child.update({
+      where: { id: child.id },
+      data: {
+        coins: { increment: coins },
+        exp: newExp,
+        level: levelForExp(newExp),
+      },
+      include: childInclude,
+    });
+
+    res.json({ child: updated, earnedCoins: coins, earnedExp: exp });
   })
 );
 
