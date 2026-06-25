@@ -4,6 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import StatusBarRow from '../components/StatusBarRow';
 import LexiBot from '../components/LexiBot';
 import { colors, fonts, shadows } from '../theme';
+import { useChild } from '../hooks/useChild';
+import { SKILL_AREAS, normalizeWeakAreas } from '../lib/dyslexia';
 
 const BARS = [
   { h: 18, color: '#9B8BC4' },
@@ -51,6 +53,10 @@ function WaveBar({ height, color, listening, delay }: { height: number; color: s
 export default function PracticeScreen({ navigation }: { navigation: any }) {
   const [listening, setListening] = useState(false);
   const [done, setDone] = useState(false);
+  const { child } = useChild();
+
+  // Дислекси шалгалтаар илэрсэн сул ур чадварт хичээлийг тааруулна.
+  const weakAreas = normalizeWeakAreas(child?.dyslexiaWeakSkills);
 
   const handleMic = () => {
     setListening(true);
@@ -68,6 +74,25 @@ export default function PracticeScreen({ navigation }: { navigation: any }) {
           <Text style={styles.title}>Лекситэй унш</Text>
           <Text style={styles.subtitle}>Өгүүлбэрийг чанга унш</Text>
         </View>
+
+        {/* Шалгалтын үр дүнд тааруулсан, хүүхэд бүрд зориулсан анхаарах чиглэл */}
+        {weakAreas.length > 0 && (
+          <View style={styles.focusCard}>
+            <Text style={styles.focusTitle}>🎯 Танд тохирсон анхаарах чиглэл</Text>
+            {weakAreas.map((area) => {
+              const meta = SKILL_AREAS[area];
+              return (
+                <View key={area} style={styles.focusRow}>
+                  <Text style={styles.focusEmoji}>{meta.emoji}</Text>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.focusLabel}>{meta.label}</Text>
+                    <Text style={styles.focusText}>{meta.focus}</Text>
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        )}
 
         <View style={{ alignItems: 'center', marginTop: 16 }}>
           <LexiBot size="md" animate={listening ? 'bob' : 'float'} />
@@ -133,6 +158,12 @@ const styles = StyleSheet.create({
   headerText: { alignItems: 'center', paddingHorizontal: 20, paddingTop: 6 },
   title: { fontFamily: fonts.fredoka.bold, fontSize: 24, color: colors.warm.text },
   subtitle: { fontFamily: fonts.lexend.regular, fontSize: 14, color: colors.warm.gray, marginTop: 4 },
+  focusCard: { marginHorizontal: 20, marginTop: 16, backgroundColor: colors.lavender.lightest, borderRadius: 20, padding: 16, borderWidth: 1, borderColor: colors.lavender.light, ...shadows.cardSm },
+  focusTitle: { fontFamily: fonts.fredoka.semibold, fontSize: 15, color: colors.lavender.darker, marginBottom: 10 },
+  focusRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 8 },
+  focusEmoji: { fontSize: 24 },
+  focusLabel: { fontFamily: fonts.lexend.semibold, fontSize: 14, color: colors.warm.text },
+  focusText: { fontFamily: fonts.lexend.regular, fontSize: 12, color: colors.warm.gray },
   sentenceCard: { marginHorizontal: 20, marginTop: 12, backgroundColor: colors.warm.card, borderRadius: 24, padding: 20, alignItems: 'center', ...shadows.card },
   sentence: { fontFamily: fonts.lexend.medium, fontSize: 24, color: colors.warm.text, textAlign: 'center', lineHeight: 34 },
   highlight: { color: colors.peach.dark, fontFamily: fonts.lexend.semibold },

@@ -8,7 +8,7 @@ const META: Record<string, { emoji: string; label: string }> = {
   Home: { emoji: '🏠', label: 'Нүүр' },
   Stories: { emoji: '📚', label: 'Үлгэр' },
   Games: { emoji: '🎮', label: 'Тоглоом' },
-  Achievements: { emoji: '📊', label: 'Явц' },
+  Parent: { emoji: '📊', label: 'Эцэг эх' },
   Profile: { emoji: '👤', label: 'Профайл' },
 };
 

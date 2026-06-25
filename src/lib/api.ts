@@ -62,10 +62,14 @@ export type Child = {
   dyslexiaTestDone: boolean;
   dyslexiaScore: number | null;
   dyslexiaRisk: string | null;
+  dyslexiaWeakSkills: string[];
   badges: Badge[];
 };
 
 export type DyslexiaRisk = 'low' | 'medium' | 'high';
+
+// Тест дуусахад илгээх даалгавар бүрийн хариу.
+export type DyslexiaAnswer = { type: string; correct: boolean };
 
 export type Lesson = { id: string; order: number; letter: string; title: string; emoji: string };
 export type Story = { id: string; title: string; emoji: string; level: string; category: string; minutes: number };
@@ -100,7 +104,10 @@ export const api = {
 
   stats: (clerkId: string) => request<Stats>(`/api/me/${clerkId}/stats`),
 
-  saveDyslexiaResult: (clerkId: string, data: { score: number; risk: DyslexiaRisk }) =>
+  saveDyslexiaResult: (
+    clerkId: string,
+    data: { score: number; risk: DyslexiaRisk; answers?: DyslexiaAnswer[] }
+  ) =>
     request<Child>(`/api/me/${clerkId}/dyslexia-result`, {
       method: 'POST',
       body: JSON.stringify(data),

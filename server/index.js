@@ -157,7 +157,37 @@ app.get(
 app.post(
   '/api/me/:clerkId/dyslexia-result',
   wrap(async (req, res) => {
-    const { score, risk } = req.body || {};
+    const { score, risk, answers } = req.body || {};
+
+    // answers: [{ type, correct }] — буруу хариулсан даалгаврын төрлүүдээс
+    // сул ур чадварын жагсаалт гаргана (давхардлыг хасч). Хичээлийг хүүхэд бүрд
+    // тааруулахад үүнийг ашиглана.
+    const answerList = Array.isArray(answers) ? answers : [];
+    const weakSkills = [
+      ...new Set(
+        answerList
+          .filter((a) => a && a.correct === false && typeof a.type === 'string')
+          .map((a) => a.type)
+      ),
+    ];
+
+    const existing = await prisma.child.findUnique({ where: { clerkId: req.params.clerkId } });
+    if (!existing) return res.status(404).json({ error: 'not found' });
+
+    // Оролдлого бүрийг түүхэнд хадгална (дэлгэрэнгүй хариунуудтай),
+    // мөн хамгийн сүүлийн сул ур чадварыг Child дээр шуурхай ашиглахаар хадгална.
+    if (answerList.length) {
+      await prisma.dyslexiaTest.create({
+        data: {
+          childId: existing.id,
+          score: typeof score === 'number' ? score : 0,
+          risk: risk || 'low',
+          answers: answerList,
+          weakSkills,
+        },
+      });
+    }
+
     const child = await prisma.child.update({
       where: { clerkId: req.params.clerkId },
       data: {
@@ -165,6 +195,7 @@ app.post(
         dyslexiaScore: typeof score === 'number' ? score : null,
         dyslexiaRisk: risk || null,
         dyslexiaTestedAt: new Date(),
+        dyslexiaWeakSkills: weakSkills,
       },
       include: childInclude,
     });

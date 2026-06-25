@@ -26,10 +26,12 @@ model Child {
   coins     Int      @default(0)
 
   // Lexi-AI дислекси урьдчилсан шалгалт (шинэ хэрэглэгч анх орж ирэхэд өгнө)
-  dyslexiaTestDone Boolean  @default(false)
-  dyslexiaScore    Int? // зөв хариултын тоо (0..6)
-  dyslexiaRisk     String? // 'low' | 'medium' | 'high'
-  dyslexiaTestedAt DateTime?
+  dyslexiaTestDone   Boolean   @default(false)
+  dyslexiaScore      Int? // зөв хариултын тоо (0..6)
+  dyslexiaRisk       String? // 'low' | 'medium' | 'high'
+  dyslexiaTestedAt   DateTime?
+  // Хамгийн сүүлийн шалгалтаар илэрсэн сул ур чадварууд (хичээлийг тааруулахад)
+  dyslexiaWeakSkills String[]  @default([])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -37,6 +39,20 @@ model Child {
   badges          Badge[]
   readingSessions ReadingSession[]
   gameResults     GameResult[]
+  dyslexiaTests   DyslexiaTest[]
+}
+
+/// Дислекси шалгалтын нэг оролдлогын дэлгэрэнгүй үр дүн
+model DyslexiaTest {
+  id         String   @id @default(cuid())
+  score      Int // зөв хариултын тоо (0..6)
+  risk       String // 'low' | 'medium' | 'high'
+  answers    Json // [{ type, correct }] — даалгавар бүрийн хариу
+  weakSkills String[] // буруу хариулсан даалгаврын төрлүүд
+  createdAt  DateTime @default(now())
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
 }
 
 /// An earned (or locked) achievement badge

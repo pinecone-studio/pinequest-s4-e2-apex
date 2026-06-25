@@ -34,7 +34,6 @@ import StoriesScreen from './src/screens/StoriesScreen';
 import GamesScreen from './src/screens/GamesScreen';
 import PhonicsScreen from './src/screens/PhonicsScreen';
 import PracticeScreen from './src/screens/PracticeScreen';
-import AchievementsScreen from './src/screens/AchievementsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import ParentScreen from './src/screens/ParentScreen';
 import DyslexiaTestScreen from './src/screens/DyslexiaTestScreen';
@@ -56,7 +55,7 @@ function MainTabs() {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Stories" component={StoriesScreen} />
       <Tab.Screen name="Games" component={GamesScreen} />
-      <Tab.Screen name="Achievements" component={AchievementsScreen} />
+      <Tab.Screen name="Parent" component={ParentScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -70,7 +69,6 @@ function AppStack() {
       <Stack.Screen name="Reading" component={ReadingScreen} />
       <Stack.Screen name="Practice" component={PracticeScreen} />
       <Stack.Screen name="Phonics" component={PhonicsScreen} />
-      <Stack.Screen name="Parent" component={ParentScreen} />
       <Stack.Screen name="DyslexiaTest" component={DyslexiaTestScreen} />
     </Stack.Navigator>
   );

@@ -137,8 +137,19 @@ exports.Prisma.ChildScalarFieldEnum = {
   dyslexiaScore: 'dyslexiaScore',
   dyslexiaRisk: 'dyslexiaRisk',
   dyslexiaTestedAt: 'dyslexiaTestedAt',
+  dyslexiaWeakSkills: 'dyslexiaWeakSkills',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DyslexiaTestScalarFieldEnum = {
+  id: 'id',
+  score: 'score',
+  risk: 'risk',
+  answers: 'answers',
+  weakSkills: 'weakSkills',
+  createdAt: 'createdAt',
+  childId: 'childId'
 };
 
 exports.Prisma.BadgeScalarFieldEnum = {
@@ -199,6 +210,10 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -209,9 +224,16 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
 
 exports.Prisma.ModelName = {
   Child: 'Child',
+  DyslexiaTest: 'DyslexiaTest',
   Badge: 'Badge',
   ReadingSession: 'ReadingSession',
   Lesson: 'Lesson',

@@ -13,6 +13,7 @@ import { colors, fonts, shadows } from '../theme';
 import { useSpeech } from '../hooks/useSpeech';
 import { useChild } from '../hooks/useChild';
 import { api, DyslexiaRisk } from '../lib/api';
+import { SKILL_AREAS, SkillArea } from '../lib/dyslexia';
 
 type TaskAnswer = boolean | null;
 
@@ -130,13 +131,23 @@ export default function DyslexiaTestScreen() {
   const score = 6 - wrongCount;
   const risk: DyslexiaRisk = wrongCount <= 1 ? 'low' : wrongCount <= 3 ? 'medium' : 'high';
 
+  // Буруу хариулсан даалгаврууд → сул ур чадварын төрлүүд. Үр дүнгийн зөвлөмж
+  // болон цаашдын хичээлийг хүүхэд бүрд тааруулахад ашиглана.
+  const weakAreas = TASKS.filter((t, i) => answers[i] === false).map(
+    (t) => t.type as SkillArea
+  );
+
   // When the test finishes, persist the result to the backend (and mark the
   // onboarding test as done so the learner isn't asked again next time).
   useEffect(() => {
     if (!showResult || saved || !child?.clerkId) return;
     setSaved(true);
+    const answerPayload = TASKS.map((t, i) => ({
+      type: t.type,
+      correct: answers[i] === true,
+    }));
     api
-      .saveDyslexiaResult(child.clerkId, { score, risk })
+      .saveDyslexiaResult(child.clerkId, { score, risk, answers: answerPayload })
       .then(() => refresh())
       .catch((e) => console.warn('Дислекси үр дүн хадгалахад алдаа:', e));
   }, [showResult, saved, child, score, risk, refresh]);
@@ -165,13 +176,30 @@ export default function DyslexiaTestScreen() {
             <Text style={styles.feedbackText}>{resultText}</Text>
           </View>
 
-          <View style={styles.tipsCard}>
-            <Text style={styles.tipsTitle}>Эцэг эхийн зөвлөмж:</Text>
-            <Text style={styles.tipItem}>• Өдөр бүр шүлэг, хэл зүгшрүүлэх үг дасгалла</Text>
-            <Text style={styles.tipItem}>• Үгийг үеэр тасдах тоглоом тоглоорой</Text>
-            <Text style={styles.tipItem}>• Дуут үлгэр сонсго, дагуулж хэлүүл</Text>
-            <Text style={styles.tipItem}>• Үсэг, авиатай тоглоом тоглоорой</Text>
-          </View>
+          {weakAreas.length > 0 ? (
+            <View style={styles.tipsCard}>
+              <Text style={styles.tipsTitle}>Анхаарах ур чадвар:</Text>
+              {weakAreas.map((area) => {
+                const meta = SKILL_AREAS[area];
+                if (!meta) return null;
+                return (
+                  <View key={area} style={styles.weakItem}>
+                    <Text style={styles.weakLabel}>
+                      {meta.emoji} {meta.label}
+                    </Text>
+                    <Text style={styles.tipItem}>• {meta.tip}</Text>
+                  </View>
+                );
+              })}
+            </View>
+          ) : (
+            <View style={styles.tipsCard}>
+              <Text style={styles.tipsTitle}>Эцэг эхийн зөвлөмж:</Text>
+              <Text style={styles.tipItem}>• Өдөр бүр шүлэг, хэл зүгшрүүлэх үг дасгалла</Text>
+              <Text style={styles.tipItem}>• Дуут үлгэр сонсго, дагуулж хэлүүл</Text>
+              <Text style={styles.tipItem}>• Үсэг, авиатай тоглоом тоглоорой</Text>
+            </View>
+          )}
 
           <TouchableOpacity
             style={styles.doneButton}
@@ -604,6 +632,15 @@ const styles = StyleSheet.create({
     color: colors.warm.text,
     lineHeight: 26,
     marginBottom: 8,
+  },
+  weakItem: {
+    marginBottom: 12,
+  },
+  weakLabel: {
+    fontSize: 16,
+    fontFamily: fonts.lexend.semibold,
+    color: colors.lavender.darker,
+    marginBottom: 4,
   },
   doneButton: {
     backgroundColor: colors.lavender.mid,

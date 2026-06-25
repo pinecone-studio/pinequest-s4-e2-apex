@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Child = $Result.DefaultSelection<Prisma.$ChildPayload>
 /**
+ * Model DyslexiaTest
+ * Дислекси шалгалтын нэг оролдлогын дэлгэрэнгүй үр дүн
+ */
+export type DyslexiaTest = $Result.DefaultSelection<Prisma.$DyslexiaTestPayload>
+/**
  * Model Badge
  * An earned (or locked) achievement badge
  */
@@ -181,6 +186,16 @@ export class PrismaClient<
     * ```
     */
   get child(): Prisma.ChildDelegate<ExtArgs>;
+
+  /**
+   * `prisma.dyslexiaTest`: Exposes CRUD operations for the **DyslexiaTest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DyslexiaTests
+    * const dyslexiaTests = await prisma.dyslexiaTest.findMany()
+    * ```
+    */
+  get dyslexiaTest(): Prisma.DyslexiaTestDelegate<ExtArgs>;
 
   /**
    * `prisma.badge`: Exposes CRUD operations for the **Badge** model.
@@ -683,6 +698,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Child: 'Child',
+    DyslexiaTest: 'DyslexiaTest',
     Badge: 'Badge',
     ReadingSession: 'ReadingSession',
     Lesson: 'Lesson',
@@ -704,7 +720,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "child" | "badge" | "readingSession" | "lesson" | "story" | "game" | "gameResult"
+      modelProps: "child" | "dyslexiaTest" | "badge" | "readingSession" | "lesson" | "story" | "game" | "gameResult"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -775,6 +791,76 @@ export namespace Prisma {
           count: {
             args: Prisma.ChildCountArgs<ExtArgs>
             result: $Utils.Optional<ChildCountAggregateOutputType> | number
+          }
+        }
+      }
+      DyslexiaTest: {
+        payload: Prisma.$DyslexiaTestPayload<ExtArgs>
+        fields: Prisma.DyslexiaTestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DyslexiaTestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DyslexiaTestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload>
+          }
+          findFirst: {
+            args: Prisma.DyslexiaTestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DyslexiaTestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload>
+          }
+          findMany: {
+            args: Prisma.DyslexiaTestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload>[]
+          }
+          create: {
+            args: Prisma.DyslexiaTestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload>
+          }
+          createMany: {
+            args: Prisma.DyslexiaTestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DyslexiaTestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload>[]
+          }
+          delete: {
+            args: Prisma.DyslexiaTestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload>
+          }
+          update: {
+            args: Prisma.DyslexiaTestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload>
+          }
+          deleteMany: {
+            args: Prisma.DyslexiaTestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DyslexiaTestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DyslexiaTestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DyslexiaTestPayload>
+          }
+          aggregate: {
+            args: Prisma.DyslexiaTestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDyslexiaTest>
+          }
+          groupBy: {
+            args: Prisma.DyslexiaTestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DyslexiaTestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DyslexiaTestCountArgs<ExtArgs>
+            result: $Utils.Optional<DyslexiaTestCountAggregateOutputType> | number
           }
         }
       }
@@ -1362,12 +1448,14 @@ export namespace Prisma {
     badges: number
     readingSessions: number
     gameResults: number
+    dyslexiaTests: number
   }
 
   export type ChildCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     badges?: boolean | ChildCountOutputTypeCountBadgesArgs
     readingSessions?: boolean | ChildCountOutputTypeCountReadingSessionsArgs
     gameResults?: boolean | ChildCountOutputTypeCountGameResultsArgs
+    dyslexiaTests?: boolean | ChildCountOutputTypeCountDyslexiaTestsArgs
   }
 
   // Custom InputTypes
@@ -1400,6 +1488,13 @@ export namespace Prisma {
    */
   export type ChildCountOutputTypeCountGameResultsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GameResultWhereInput
+  }
+
+  /**
+   * ChildCountOutputType without action
+   */
+  export type ChildCountOutputTypeCountDyslexiaTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DyslexiaTestWhereInput
   }
 
 
@@ -1488,6 +1583,7 @@ export namespace Prisma {
     dyslexiaScore: number
     dyslexiaRisk: number
     dyslexiaTestedAt: number
+    dyslexiaWeakSkills: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1563,6 +1659,7 @@ export namespace Prisma {
     dyslexiaScore?: true
     dyslexiaRisk?: true
     dyslexiaTestedAt?: true
+    dyslexiaWeakSkills?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1669,6 +1766,7 @@ export namespace Prisma {
     dyslexiaScore: number | null
     dyslexiaRisk: string | null
     dyslexiaTestedAt: Date | null
+    dyslexiaWeakSkills: string[]
     createdAt: Date
     updatedAt: Date
     _count: ChildCountAggregateOutputType | null
@@ -1707,11 +1805,13 @@ export namespace Prisma {
     dyslexiaScore?: boolean
     dyslexiaRisk?: boolean
     dyslexiaTestedAt?: boolean
+    dyslexiaWeakSkills?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     badges?: boolean | Child$badgesArgs<ExtArgs>
     readingSessions?: boolean | Child$readingSessionsArgs<ExtArgs>
     gameResults?: boolean | Child$gameResultsArgs<ExtArgs>
+    dyslexiaTests?: boolean | Child$dyslexiaTestsArgs<ExtArgs>
     _count?: boolean | ChildCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["child"]>
 
@@ -1730,6 +1830,7 @@ export namespace Prisma {
     dyslexiaScore?: boolean
     dyslexiaRisk?: boolean
     dyslexiaTestedAt?: boolean
+    dyslexiaWeakSkills?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["child"]>
@@ -1749,6 +1850,7 @@ export namespace Prisma {
     dyslexiaScore?: boolean
     dyslexiaRisk?: boolean
     dyslexiaTestedAt?: boolean
+    dyslexiaWeakSkills?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -1757,6 +1859,7 @@ export namespace Prisma {
     badges?: boolean | Child$badgesArgs<ExtArgs>
     readingSessions?: boolean | Child$readingSessionsArgs<ExtArgs>
     gameResults?: boolean | Child$gameResultsArgs<ExtArgs>
+    dyslexiaTests?: boolean | Child$dyslexiaTestsArgs<ExtArgs>
     _count?: boolean | ChildCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ChildIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1767,6 +1870,7 @@ export namespace Prisma {
       badges: Prisma.$BadgePayload<ExtArgs>[]
       readingSessions: Prisma.$ReadingSessionPayload<ExtArgs>[]
       gameResults: Prisma.$GameResultPayload<ExtArgs>[]
+      dyslexiaTests: Prisma.$DyslexiaTestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1783,6 +1887,7 @@ export namespace Prisma {
       dyslexiaScore: number | null
       dyslexiaRisk: string | null
       dyslexiaTestedAt: Date | null
+      dyslexiaWeakSkills: string[]
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["child"]>
@@ -2152,6 +2257,7 @@ export namespace Prisma {
     badges<T extends Child$badgesArgs<ExtArgs> = {}>(args?: Subset<T, Child$badgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BadgePayload<ExtArgs>, T, "findMany"> | Null>
     readingSessions<T extends Child$readingSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Child$readingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReadingSessionPayload<ExtArgs>, T, "findMany"> | Null>
     gameResults<T extends Child$gameResultsArgs<ExtArgs> = {}>(args?: Subset<T, Child$gameResultsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GameResultPayload<ExtArgs>, T, "findMany"> | Null>
+    dyslexiaTests<T extends Child$dyslexiaTestsArgs<ExtArgs> = {}>(args?: Subset<T, Child$dyslexiaTestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2195,6 +2301,7 @@ export namespace Prisma {
     readonly dyslexiaScore: FieldRef<"Child", 'Int'>
     readonly dyslexiaRisk: FieldRef<"Child", 'String'>
     readonly dyslexiaTestedAt: FieldRef<"Child", 'DateTime'>
+    readonly dyslexiaWeakSkills: FieldRef<"Child", 'String[]'>
     readonly createdAt: FieldRef<"Child", 'DateTime'>
     readonly updatedAt: FieldRef<"Child", 'DateTime'>
   }
@@ -2571,6 +2678,26 @@ export namespace Prisma {
   }
 
   /**
+   * Child.dyslexiaTests
+   */
+  export type Child$dyslexiaTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    where?: DyslexiaTestWhereInput
+    orderBy?: DyslexiaTestOrderByWithRelationInput | DyslexiaTestOrderByWithRelationInput[]
+    cursor?: DyslexiaTestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DyslexiaTestScalarFieldEnum | DyslexiaTestScalarFieldEnum[]
+  }
+
+  /**
    * Child without action
    */
   export type ChildDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2582,6 +2709,989 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ChildInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DyslexiaTest
+   */
+
+  export type AggregateDyslexiaTest = {
+    _count: DyslexiaTestCountAggregateOutputType | null
+    _avg: DyslexiaTestAvgAggregateOutputType | null
+    _sum: DyslexiaTestSumAggregateOutputType | null
+    _min: DyslexiaTestMinAggregateOutputType | null
+    _max: DyslexiaTestMaxAggregateOutputType | null
+  }
+
+  export type DyslexiaTestAvgAggregateOutputType = {
+    score: number | null
+  }
+
+  export type DyslexiaTestSumAggregateOutputType = {
+    score: number | null
+  }
+
+  export type DyslexiaTestMinAggregateOutputType = {
+    id: string | null
+    score: number | null
+    risk: string | null
+    createdAt: Date | null
+    childId: string | null
+  }
+
+  export type DyslexiaTestMaxAggregateOutputType = {
+    id: string | null
+    score: number | null
+    risk: string | null
+    createdAt: Date | null
+    childId: string | null
+  }
+
+  export type DyslexiaTestCountAggregateOutputType = {
+    id: number
+    score: number
+    risk: number
+    answers: number
+    weakSkills: number
+    createdAt: number
+    childId: number
+    _all: number
+  }
+
+
+  export type DyslexiaTestAvgAggregateInputType = {
+    score?: true
+  }
+
+  export type DyslexiaTestSumAggregateInputType = {
+    score?: true
+  }
+
+  export type DyslexiaTestMinAggregateInputType = {
+    id?: true
+    score?: true
+    risk?: true
+    createdAt?: true
+    childId?: true
+  }
+
+  export type DyslexiaTestMaxAggregateInputType = {
+    id?: true
+    score?: true
+    risk?: true
+    createdAt?: true
+    childId?: true
+  }
+
+  export type DyslexiaTestCountAggregateInputType = {
+    id?: true
+    score?: true
+    risk?: true
+    answers?: true
+    weakSkills?: true
+    createdAt?: true
+    childId?: true
+    _all?: true
+  }
+
+  export type DyslexiaTestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DyslexiaTest to aggregate.
+     */
+    where?: DyslexiaTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DyslexiaTests to fetch.
+     */
+    orderBy?: DyslexiaTestOrderByWithRelationInput | DyslexiaTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DyslexiaTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DyslexiaTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DyslexiaTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DyslexiaTests
+    **/
+    _count?: true | DyslexiaTestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DyslexiaTestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DyslexiaTestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DyslexiaTestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DyslexiaTestMaxAggregateInputType
+  }
+
+  export type GetDyslexiaTestAggregateType<T extends DyslexiaTestAggregateArgs> = {
+        [P in keyof T & keyof AggregateDyslexiaTest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDyslexiaTest[P]>
+      : GetScalarType<T[P], AggregateDyslexiaTest[P]>
+  }
+
+
+
+
+  export type DyslexiaTestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DyslexiaTestWhereInput
+    orderBy?: DyslexiaTestOrderByWithAggregationInput | DyslexiaTestOrderByWithAggregationInput[]
+    by: DyslexiaTestScalarFieldEnum[] | DyslexiaTestScalarFieldEnum
+    having?: DyslexiaTestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DyslexiaTestCountAggregateInputType | true
+    _avg?: DyslexiaTestAvgAggregateInputType
+    _sum?: DyslexiaTestSumAggregateInputType
+    _min?: DyslexiaTestMinAggregateInputType
+    _max?: DyslexiaTestMaxAggregateInputType
+  }
+
+  export type DyslexiaTestGroupByOutputType = {
+    id: string
+    score: number
+    risk: string
+    answers: JsonValue
+    weakSkills: string[]
+    createdAt: Date
+    childId: string
+    _count: DyslexiaTestCountAggregateOutputType | null
+    _avg: DyslexiaTestAvgAggregateOutputType | null
+    _sum: DyslexiaTestSumAggregateOutputType | null
+    _min: DyslexiaTestMinAggregateOutputType | null
+    _max: DyslexiaTestMaxAggregateOutputType | null
+  }
+
+  type GetDyslexiaTestGroupByPayload<T extends DyslexiaTestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DyslexiaTestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DyslexiaTestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DyslexiaTestGroupByOutputType[P]>
+            : GetScalarType<T[P], DyslexiaTestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DyslexiaTestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    score?: boolean
+    risk?: boolean
+    answers?: boolean
+    weakSkills?: boolean
+    createdAt?: boolean
+    childId?: boolean
+    child?: boolean | ChildDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dyslexiaTest"]>
+
+  export type DyslexiaTestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    score?: boolean
+    risk?: boolean
+    answers?: boolean
+    weakSkills?: boolean
+    createdAt?: boolean
+    childId?: boolean
+    child?: boolean | ChildDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dyslexiaTest"]>
+
+  export type DyslexiaTestSelectScalar = {
+    id?: boolean
+    score?: boolean
+    risk?: boolean
+    answers?: boolean
+    weakSkills?: boolean
+    createdAt?: boolean
+    childId?: boolean
+  }
+
+  export type DyslexiaTestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    child?: boolean | ChildDefaultArgs<ExtArgs>
+  }
+  export type DyslexiaTestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    child?: boolean | ChildDefaultArgs<ExtArgs>
+  }
+
+  export type $DyslexiaTestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DyslexiaTest"
+    objects: {
+      child: Prisma.$ChildPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      score: number
+      risk: string
+      answers: Prisma.JsonValue
+      weakSkills: string[]
+      createdAt: Date
+      childId: string
+    }, ExtArgs["result"]["dyslexiaTest"]>
+    composites: {}
+  }
+
+  type DyslexiaTestGetPayload<S extends boolean | null | undefined | DyslexiaTestDefaultArgs> = $Result.GetResult<Prisma.$DyslexiaTestPayload, S>
+
+  type DyslexiaTestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<DyslexiaTestFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: DyslexiaTestCountAggregateInputType | true
+    }
+
+  export interface DyslexiaTestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DyslexiaTest'], meta: { name: 'DyslexiaTest' } }
+    /**
+     * Find zero or one DyslexiaTest that matches the filter.
+     * @param {DyslexiaTestFindUniqueArgs} args - Arguments to find a DyslexiaTest
+     * @example
+     * // Get one DyslexiaTest
+     * const dyslexiaTest = await prisma.dyslexiaTest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DyslexiaTestFindUniqueArgs>(args: SelectSubset<T, DyslexiaTestFindUniqueArgs<ExtArgs>>): Prisma__DyslexiaTestClient<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one DyslexiaTest that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {DyslexiaTestFindUniqueOrThrowArgs} args - Arguments to find a DyslexiaTest
+     * @example
+     * // Get one DyslexiaTest
+     * const dyslexiaTest = await prisma.dyslexiaTest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DyslexiaTestFindUniqueOrThrowArgs>(args: SelectSubset<T, DyslexiaTestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DyslexiaTestClient<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first DyslexiaTest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DyslexiaTestFindFirstArgs} args - Arguments to find a DyslexiaTest
+     * @example
+     * // Get one DyslexiaTest
+     * const dyslexiaTest = await prisma.dyslexiaTest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DyslexiaTestFindFirstArgs>(args?: SelectSubset<T, DyslexiaTestFindFirstArgs<ExtArgs>>): Prisma__DyslexiaTestClient<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first DyslexiaTest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DyslexiaTestFindFirstOrThrowArgs} args - Arguments to find a DyslexiaTest
+     * @example
+     * // Get one DyslexiaTest
+     * const dyslexiaTest = await prisma.dyslexiaTest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DyslexiaTestFindFirstOrThrowArgs>(args?: SelectSubset<T, DyslexiaTestFindFirstOrThrowArgs<ExtArgs>>): Prisma__DyslexiaTestClient<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more DyslexiaTests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DyslexiaTestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DyslexiaTests
+     * const dyslexiaTests = await prisma.dyslexiaTest.findMany()
+     * 
+     * // Get first 10 DyslexiaTests
+     * const dyslexiaTests = await prisma.dyslexiaTest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dyslexiaTestWithIdOnly = await prisma.dyslexiaTest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DyslexiaTestFindManyArgs>(args?: SelectSubset<T, DyslexiaTestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a DyslexiaTest.
+     * @param {DyslexiaTestCreateArgs} args - Arguments to create a DyslexiaTest.
+     * @example
+     * // Create one DyslexiaTest
+     * const DyslexiaTest = await prisma.dyslexiaTest.create({
+     *   data: {
+     *     // ... data to create a DyslexiaTest
+     *   }
+     * })
+     * 
+     */
+    create<T extends DyslexiaTestCreateArgs>(args: SelectSubset<T, DyslexiaTestCreateArgs<ExtArgs>>): Prisma__DyslexiaTestClient<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many DyslexiaTests.
+     * @param {DyslexiaTestCreateManyArgs} args - Arguments to create many DyslexiaTests.
+     * @example
+     * // Create many DyslexiaTests
+     * const dyslexiaTest = await prisma.dyslexiaTest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DyslexiaTestCreateManyArgs>(args?: SelectSubset<T, DyslexiaTestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DyslexiaTests and returns the data saved in the database.
+     * @param {DyslexiaTestCreateManyAndReturnArgs} args - Arguments to create many DyslexiaTests.
+     * @example
+     * // Create many DyslexiaTests
+     * const dyslexiaTest = await prisma.dyslexiaTest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DyslexiaTests and only return the `id`
+     * const dyslexiaTestWithIdOnly = await prisma.dyslexiaTest.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DyslexiaTestCreateManyAndReturnArgs>(args?: SelectSubset<T, DyslexiaTestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a DyslexiaTest.
+     * @param {DyslexiaTestDeleteArgs} args - Arguments to delete one DyslexiaTest.
+     * @example
+     * // Delete one DyslexiaTest
+     * const DyslexiaTest = await prisma.dyslexiaTest.delete({
+     *   where: {
+     *     // ... filter to delete one DyslexiaTest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DyslexiaTestDeleteArgs>(args: SelectSubset<T, DyslexiaTestDeleteArgs<ExtArgs>>): Prisma__DyslexiaTestClient<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one DyslexiaTest.
+     * @param {DyslexiaTestUpdateArgs} args - Arguments to update one DyslexiaTest.
+     * @example
+     * // Update one DyslexiaTest
+     * const dyslexiaTest = await prisma.dyslexiaTest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DyslexiaTestUpdateArgs>(args: SelectSubset<T, DyslexiaTestUpdateArgs<ExtArgs>>): Prisma__DyslexiaTestClient<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more DyslexiaTests.
+     * @param {DyslexiaTestDeleteManyArgs} args - Arguments to filter DyslexiaTests to delete.
+     * @example
+     * // Delete a few DyslexiaTests
+     * const { count } = await prisma.dyslexiaTest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DyslexiaTestDeleteManyArgs>(args?: SelectSubset<T, DyslexiaTestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DyslexiaTests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DyslexiaTestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DyslexiaTests
+     * const dyslexiaTest = await prisma.dyslexiaTest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DyslexiaTestUpdateManyArgs>(args: SelectSubset<T, DyslexiaTestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DyslexiaTest.
+     * @param {DyslexiaTestUpsertArgs} args - Arguments to update or create a DyslexiaTest.
+     * @example
+     * // Update or create a DyslexiaTest
+     * const dyslexiaTest = await prisma.dyslexiaTest.upsert({
+     *   create: {
+     *     // ... data to create a DyslexiaTest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DyslexiaTest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DyslexiaTestUpsertArgs>(args: SelectSubset<T, DyslexiaTestUpsertArgs<ExtArgs>>): Prisma__DyslexiaTestClient<$Result.GetResult<Prisma.$DyslexiaTestPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of DyslexiaTests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DyslexiaTestCountArgs} args - Arguments to filter DyslexiaTests to count.
+     * @example
+     * // Count the number of DyslexiaTests
+     * const count = await prisma.dyslexiaTest.count({
+     *   where: {
+     *     // ... the filter for the DyslexiaTests we want to count
+     *   }
+     * })
+    **/
+    count<T extends DyslexiaTestCountArgs>(
+      args?: Subset<T, DyslexiaTestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DyslexiaTestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DyslexiaTest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DyslexiaTestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DyslexiaTestAggregateArgs>(args: Subset<T, DyslexiaTestAggregateArgs>): Prisma.PrismaPromise<GetDyslexiaTestAggregateType<T>>
+
+    /**
+     * Group by DyslexiaTest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DyslexiaTestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DyslexiaTestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DyslexiaTestGroupByArgs['orderBy'] }
+        : { orderBy?: DyslexiaTestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DyslexiaTestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDyslexiaTestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DyslexiaTest model
+   */
+  readonly fields: DyslexiaTestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DyslexiaTest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DyslexiaTestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    child<T extends ChildDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChildDefaultArgs<ExtArgs>>): Prisma__ChildClient<$Result.GetResult<Prisma.$ChildPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DyslexiaTest model
+   */ 
+  interface DyslexiaTestFieldRefs {
+    readonly id: FieldRef<"DyslexiaTest", 'String'>
+    readonly score: FieldRef<"DyslexiaTest", 'Int'>
+    readonly risk: FieldRef<"DyslexiaTest", 'String'>
+    readonly answers: FieldRef<"DyslexiaTest", 'Json'>
+    readonly weakSkills: FieldRef<"DyslexiaTest", 'String[]'>
+    readonly createdAt: FieldRef<"DyslexiaTest", 'DateTime'>
+    readonly childId: FieldRef<"DyslexiaTest", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DyslexiaTest findUnique
+   */
+  export type DyslexiaTestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * Filter, which DyslexiaTest to fetch.
+     */
+    where: DyslexiaTestWhereUniqueInput
+  }
+
+  /**
+   * DyslexiaTest findUniqueOrThrow
+   */
+  export type DyslexiaTestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * Filter, which DyslexiaTest to fetch.
+     */
+    where: DyslexiaTestWhereUniqueInput
+  }
+
+  /**
+   * DyslexiaTest findFirst
+   */
+  export type DyslexiaTestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * Filter, which DyslexiaTest to fetch.
+     */
+    where?: DyslexiaTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DyslexiaTests to fetch.
+     */
+    orderBy?: DyslexiaTestOrderByWithRelationInput | DyslexiaTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DyslexiaTests.
+     */
+    cursor?: DyslexiaTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DyslexiaTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DyslexiaTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DyslexiaTests.
+     */
+    distinct?: DyslexiaTestScalarFieldEnum | DyslexiaTestScalarFieldEnum[]
+  }
+
+  /**
+   * DyslexiaTest findFirstOrThrow
+   */
+  export type DyslexiaTestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * Filter, which DyslexiaTest to fetch.
+     */
+    where?: DyslexiaTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DyslexiaTests to fetch.
+     */
+    orderBy?: DyslexiaTestOrderByWithRelationInput | DyslexiaTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DyslexiaTests.
+     */
+    cursor?: DyslexiaTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DyslexiaTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DyslexiaTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DyslexiaTests.
+     */
+    distinct?: DyslexiaTestScalarFieldEnum | DyslexiaTestScalarFieldEnum[]
+  }
+
+  /**
+   * DyslexiaTest findMany
+   */
+  export type DyslexiaTestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * Filter, which DyslexiaTests to fetch.
+     */
+    where?: DyslexiaTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DyslexiaTests to fetch.
+     */
+    orderBy?: DyslexiaTestOrderByWithRelationInput | DyslexiaTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DyslexiaTests.
+     */
+    cursor?: DyslexiaTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DyslexiaTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DyslexiaTests.
+     */
+    skip?: number
+    distinct?: DyslexiaTestScalarFieldEnum | DyslexiaTestScalarFieldEnum[]
+  }
+
+  /**
+   * DyslexiaTest create
+   */
+  export type DyslexiaTestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DyslexiaTest.
+     */
+    data: XOR<DyslexiaTestCreateInput, DyslexiaTestUncheckedCreateInput>
+  }
+
+  /**
+   * DyslexiaTest createMany
+   */
+  export type DyslexiaTestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DyslexiaTests.
+     */
+    data: DyslexiaTestCreateManyInput | DyslexiaTestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DyslexiaTest createManyAndReturn
+   */
+  export type DyslexiaTestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many DyslexiaTests.
+     */
+    data: DyslexiaTestCreateManyInput | DyslexiaTestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DyslexiaTest update
+   */
+  export type DyslexiaTestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DyslexiaTest.
+     */
+    data: XOR<DyslexiaTestUpdateInput, DyslexiaTestUncheckedUpdateInput>
+    /**
+     * Choose, which DyslexiaTest to update.
+     */
+    where: DyslexiaTestWhereUniqueInput
+  }
+
+  /**
+   * DyslexiaTest updateMany
+   */
+  export type DyslexiaTestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DyslexiaTests.
+     */
+    data: XOR<DyslexiaTestUpdateManyMutationInput, DyslexiaTestUncheckedUpdateManyInput>
+    /**
+     * Filter which DyslexiaTests to update
+     */
+    where?: DyslexiaTestWhereInput
+  }
+
+  /**
+   * DyslexiaTest upsert
+   */
+  export type DyslexiaTestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DyslexiaTest to update in case it exists.
+     */
+    where: DyslexiaTestWhereUniqueInput
+    /**
+     * In case the DyslexiaTest found by the `where` argument doesn't exist, create a new DyslexiaTest with this data.
+     */
+    create: XOR<DyslexiaTestCreateInput, DyslexiaTestUncheckedCreateInput>
+    /**
+     * In case the DyslexiaTest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DyslexiaTestUpdateInput, DyslexiaTestUncheckedUpdateInput>
+  }
+
+  /**
+   * DyslexiaTest delete
+   */
+  export type DyslexiaTestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
+    /**
+     * Filter which DyslexiaTest to delete.
+     */
+    where: DyslexiaTestWhereUniqueInput
+  }
+
+  /**
+   * DyslexiaTest deleteMany
+   */
+  export type DyslexiaTestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DyslexiaTests to delete
+     */
+    where?: DyslexiaTestWhereInput
+  }
+
+  /**
+   * DyslexiaTest without action
+   */
+  export type DyslexiaTestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DyslexiaTest
+     */
+    select?: DyslexiaTestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DyslexiaTestInclude<ExtArgs> | null
   }
 
 
@@ -8251,11 +9361,25 @@ export namespace Prisma {
     dyslexiaScore: 'dyslexiaScore',
     dyslexiaRisk: 'dyslexiaRisk',
     dyslexiaTestedAt: 'dyslexiaTestedAt',
+    dyslexiaWeakSkills: 'dyslexiaWeakSkills',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type ChildScalarFieldEnum = (typeof ChildScalarFieldEnum)[keyof typeof ChildScalarFieldEnum]
+
+
+  export const DyslexiaTestScalarFieldEnum: {
+    id: 'id',
+    score: 'score',
+    risk: 'risk',
+    answers: 'answers',
+    weakSkills: 'weakSkills',
+    createdAt: 'createdAt',
+    childId: 'childId'
+  };
+
+  export type DyslexiaTestScalarFieldEnum = (typeof DyslexiaTestScalarFieldEnum)[keyof typeof DyslexiaTestScalarFieldEnum]
 
 
   export const BadgeScalarFieldEnum: {
@@ -8337,6 +9461,13 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -8351,6 +9482,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -8408,6 +9548,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -8442,11 +9589,13 @@ export namespace Prisma {
     dyslexiaScore?: IntNullableFilter<"Child"> | number | null
     dyslexiaRisk?: StringNullableFilter<"Child"> | string | null
     dyslexiaTestedAt?: DateTimeNullableFilter<"Child"> | Date | string | null
+    dyslexiaWeakSkills?: StringNullableListFilter<"Child">
     createdAt?: DateTimeFilter<"Child"> | Date | string
     updatedAt?: DateTimeFilter<"Child"> | Date | string
     badges?: BadgeListRelationFilter
     readingSessions?: ReadingSessionListRelationFilter
     gameResults?: GameResultListRelationFilter
+    dyslexiaTests?: DyslexiaTestListRelationFilter
   }
 
   export type ChildOrderByWithRelationInput = {
@@ -8464,11 +9613,13 @@ export namespace Prisma {
     dyslexiaScore?: SortOrderInput | SortOrder
     dyslexiaRisk?: SortOrderInput | SortOrder
     dyslexiaTestedAt?: SortOrderInput | SortOrder
+    dyslexiaWeakSkills?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     badges?: BadgeOrderByRelationAggregateInput
     readingSessions?: ReadingSessionOrderByRelationAggregateInput
     gameResults?: GameResultOrderByRelationAggregateInput
+    dyslexiaTests?: DyslexiaTestOrderByRelationAggregateInput
   }
 
   export type ChildWhereUniqueInput = Prisma.AtLeast<{
@@ -8489,11 +9640,13 @@ export namespace Prisma {
     dyslexiaScore?: IntNullableFilter<"Child"> | number | null
     dyslexiaRisk?: StringNullableFilter<"Child"> | string | null
     dyslexiaTestedAt?: DateTimeNullableFilter<"Child"> | Date | string | null
+    dyslexiaWeakSkills?: StringNullableListFilter<"Child">
     createdAt?: DateTimeFilter<"Child"> | Date | string
     updatedAt?: DateTimeFilter<"Child"> | Date | string
     badges?: BadgeListRelationFilter
     readingSessions?: ReadingSessionListRelationFilter
     gameResults?: GameResultListRelationFilter
+    dyslexiaTests?: DyslexiaTestListRelationFilter
   }, "id" | "clerkId">
 
   export type ChildOrderByWithAggregationInput = {
@@ -8511,6 +9664,7 @@ export namespace Prisma {
     dyslexiaScore?: SortOrderInput | SortOrder
     dyslexiaRisk?: SortOrderInput | SortOrder
     dyslexiaTestedAt?: SortOrderInput | SortOrder
+    dyslexiaWeakSkills?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ChildCountOrderByAggregateInput
@@ -8538,8 +9692,76 @@ export namespace Prisma {
     dyslexiaScore?: IntNullableWithAggregatesFilter<"Child"> | number | null
     dyslexiaRisk?: StringNullableWithAggregatesFilter<"Child"> | string | null
     dyslexiaTestedAt?: DateTimeNullableWithAggregatesFilter<"Child"> | Date | string | null
+    dyslexiaWeakSkills?: StringNullableListFilter<"Child">
     createdAt?: DateTimeWithAggregatesFilter<"Child"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Child"> | Date | string
+  }
+
+  export type DyslexiaTestWhereInput = {
+    AND?: DyslexiaTestWhereInput | DyslexiaTestWhereInput[]
+    OR?: DyslexiaTestWhereInput[]
+    NOT?: DyslexiaTestWhereInput | DyslexiaTestWhereInput[]
+    id?: StringFilter<"DyslexiaTest"> | string
+    score?: IntFilter<"DyslexiaTest"> | number
+    risk?: StringFilter<"DyslexiaTest"> | string
+    answers?: JsonFilter<"DyslexiaTest">
+    weakSkills?: StringNullableListFilter<"DyslexiaTest">
+    createdAt?: DateTimeFilter<"DyslexiaTest"> | Date | string
+    childId?: StringFilter<"DyslexiaTest"> | string
+    child?: XOR<ChildRelationFilter, ChildWhereInput>
+  }
+
+  export type DyslexiaTestOrderByWithRelationInput = {
+    id?: SortOrder
+    score?: SortOrder
+    risk?: SortOrder
+    answers?: SortOrder
+    weakSkills?: SortOrder
+    createdAt?: SortOrder
+    childId?: SortOrder
+    child?: ChildOrderByWithRelationInput
+  }
+
+  export type DyslexiaTestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: DyslexiaTestWhereInput | DyslexiaTestWhereInput[]
+    OR?: DyslexiaTestWhereInput[]
+    NOT?: DyslexiaTestWhereInput | DyslexiaTestWhereInput[]
+    score?: IntFilter<"DyslexiaTest"> | number
+    risk?: StringFilter<"DyslexiaTest"> | string
+    answers?: JsonFilter<"DyslexiaTest">
+    weakSkills?: StringNullableListFilter<"DyslexiaTest">
+    createdAt?: DateTimeFilter<"DyslexiaTest"> | Date | string
+    childId?: StringFilter<"DyslexiaTest"> | string
+    child?: XOR<ChildRelationFilter, ChildWhereInput>
+  }, "id">
+
+  export type DyslexiaTestOrderByWithAggregationInput = {
+    id?: SortOrder
+    score?: SortOrder
+    risk?: SortOrder
+    answers?: SortOrder
+    weakSkills?: SortOrder
+    createdAt?: SortOrder
+    childId?: SortOrder
+    _count?: DyslexiaTestCountOrderByAggregateInput
+    _avg?: DyslexiaTestAvgOrderByAggregateInput
+    _max?: DyslexiaTestMaxOrderByAggregateInput
+    _min?: DyslexiaTestMinOrderByAggregateInput
+    _sum?: DyslexiaTestSumOrderByAggregateInput
+  }
+
+  export type DyslexiaTestScalarWhereWithAggregatesInput = {
+    AND?: DyslexiaTestScalarWhereWithAggregatesInput | DyslexiaTestScalarWhereWithAggregatesInput[]
+    OR?: DyslexiaTestScalarWhereWithAggregatesInput[]
+    NOT?: DyslexiaTestScalarWhereWithAggregatesInput | DyslexiaTestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DyslexiaTest"> | string
+    score?: IntWithAggregatesFilter<"DyslexiaTest"> | number
+    risk?: StringWithAggregatesFilter<"DyslexiaTest"> | string
+    answers?: JsonWithAggregatesFilter<"DyslexiaTest">
+    weakSkills?: StringNullableListFilter<"DyslexiaTest">
+    createdAt?: DateTimeWithAggregatesFilter<"DyslexiaTest"> | Date | string
+    childId?: StringWithAggregatesFilter<"DyslexiaTest"> | string
   }
 
   export type BadgeWhereInput = {
@@ -8912,11 +10134,13 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     badges?: BadgeCreateNestedManyWithoutChildInput
     readingSessions?: ReadingSessionCreateNestedManyWithoutChildInput
     gameResults?: GameResultCreateNestedManyWithoutChildInput
+    dyslexiaTests?: DyslexiaTestCreateNestedManyWithoutChildInput
   }
 
   export type ChildUncheckedCreateInput = {
@@ -8934,11 +10158,13 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     badges?: BadgeUncheckedCreateNestedManyWithoutChildInput
     readingSessions?: ReadingSessionUncheckedCreateNestedManyWithoutChildInput
     gameResults?: GameResultUncheckedCreateNestedManyWithoutChildInput
+    dyslexiaTests?: DyslexiaTestUncheckedCreateNestedManyWithoutChildInput
   }
 
   export type ChildUpdateInput = {
@@ -8956,11 +10182,13 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     badges?: BadgeUpdateManyWithoutChildNestedInput
     readingSessions?: ReadingSessionUpdateManyWithoutChildNestedInput
     gameResults?: GameResultUpdateManyWithoutChildNestedInput
+    dyslexiaTests?: DyslexiaTestUpdateManyWithoutChildNestedInput
   }
 
   export type ChildUncheckedUpdateInput = {
@@ -8978,11 +10206,13 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     badges?: BadgeUncheckedUpdateManyWithoutChildNestedInput
     readingSessions?: ReadingSessionUncheckedUpdateManyWithoutChildNestedInput
     gameResults?: GameResultUncheckedUpdateManyWithoutChildNestedInput
+    dyslexiaTests?: DyslexiaTestUncheckedUpdateManyWithoutChildNestedInput
   }
 
   export type ChildCreateManyInput = {
@@ -9000,6 +10230,7 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9019,6 +10250,7 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9038,8 +10270,78 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DyslexiaTestCreateInput = {
+    id?: string
+    score: number
+    risk: string
+    answers: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestCreateweakSkillsInput | string[]
+    createdAt?: Date | string
+    child: ChildCreateNestedOneWithoutDyslexiaTestsInput
+  }
+
+  export type DyslexiaTestUncheckedCreateInput = {
+    id?: string
+    score: number
+    risk: string
+    answers: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestCreateweakSkillsInput | string[]
+    createdAt?: Date | string
+    childId: string
+  }
+
+  export type DyslexiaTestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    risk?: StringFieldUpdateOperationsInput | string
+    answers?: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestUpdateweakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    child?: ChildUpdateOneRequiredWithoutDyslexiaTestsNestedInput
+  }
+
+  export type DyslexiaTestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    risk?: StringFieldUpdateOperationsInput | string
+    answers?: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestUpdateweakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DyslexiaTestCreateManyInput = {
+    id?: string
+    score: number
+    risk: string
+    answers: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestCreateweakSkillsInput | string[]
+    createdAt?: Date | string
+    childId: string
+  }
+
+  export type DyslexiaTestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    risk?: StringFieldUpdateOperationsInput | string
+    answers?: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestUpdateweakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DyslexiaTestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    risk?: StringFieldUpdateOperationsInput | string
+    answers?: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestUpdateweakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childId?: StringFieldUpdateOperationsInput | string
   }
 
   export type BadgeCreateInput = {
@@ -9478,6 +10780,14 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -9507,6 +10817,12 @@ export namespace Prisma {
     none?: GameResultWhereInput
   }
 
+  export type DyslexiaTestListRelationFilter = {
+    every?: DyslexiaTestWhereInput
+    some?: DyslexiaTestWhereInput
+    none?: DyslexiaTestWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -9521,6 +10837,10 @@ export namespace Prisma {
   }
 
   export type GameResultOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DyslexiaTestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -9539,6 +10859,7 @@ export namespace Prisma {
     dyslexiaScore?: SortOrder
     dyslexiaRisk?: SortOrder
     dyslexiaTestedAt?: SortOrder
+    dyslexiaWeakSkills?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -9700,10 +11021,91 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type JsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type ChildRelationFilter = {
     is?: ChildWhereInput
     isNot?: ChildWhereInput
+  }
+
+  export type DyslexiaTestCountOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+    risk?: SortOrder
+    answers?: SortOrder
+    weakSkills?: SortOrder
+    createdAt?: SortOrder
+    childId?: SortOrder
+  }
+
+  export type DyslexiaTestAvgOrderByAggregateInput = {
+    score?: SortOrder
+  }
+
+  export type DyslexiaTestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+    risk?: SortOrder
+    createdAt?: SortOrder
+    childId?: SortOrder
+  }
+
+  export type DyslexiaTestMinOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+    risk?: SortOrder
+    createdAt?: SortOrder
+    childId?: SortOrder
+  }
+
+  export type DyslexiaTestSumOrderByAggregateInput = {
+    score?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type BadgeChildIdKeyCompoundUniqueInput = {
@@ -9933,6 +11335,10 @@ export namespace Prisma {
     score?: SortOrder
   }
 
+  export type ChildCreatedyslexiaWeakSkillsInput = {
+    set: string[]
+  }
+
   export type BadgeCreateNestedManyWithoutChildInput = {
     create?: XOR<BadgeCreateWithoutChildInput, BadgeUncheckedCreateWithoutChildInput> | BadgeCreateWithoutChildInput[] | BadgeUncheckedCreateWithoutChildInput[]
     connectOrCreate?: BadgeCreateOrConnectWithoutChildInput | BadgeCreateOrConnectWithoutChildInput[]
@@ -9954,6 +11360,13 @@ export namespace Prisma {
     connect?: GameResultWhereUniqueInput | GameResultWhereUniqueInput[]
   }
 
+  export type DyslexiaTestCreateNestedManyWithoutChildInput = {
+    create?: XOR<DyslexiaTestCreateWithoutChildInput, DyslexiaTestUncheckedCreateWithoutChildInput> | DyslexiaTestCreateWithoutChildInput[] | DyslexiaTestUncheckedCreateWithoutChildInput[]
+    connectOrCreate?: DyslexiaTestCreateOrConnectWithoutChildInput | DyslexiaTestCreateOrConnectWithoutChildInput[]
+    createMany?: DyslexiaTestCreateManyChildInputEnvelope
+    connect?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+  }
+
   export type BadgeUncheckedCreateNestedManyWithoutChildInput = {
     create?: XOR<BadgeCreateWithoutChildInput, BadgeUncheckedCreateWithoutChildInput> | BadgeCreateWithoutChildInput[] | BadgeUncheckedCreateWithoutChildInput[]
     connectOrCreate?: BadgeCreateOrConnectWithoutChildInput | BadgeCreateOrConnectWithoutChildInput[]
@@ -9973,6 +11386,13 @@ export namespace Prisma {
     connectOrCreate?: GameResultCreateOrConnectWithoutChildInput | GameResultCreateOrConnectWithoutChildInput[]
     createMany?: GameResultCreateManyChildInputEnvelope
     connect?: GameResultWhereUniqueInput | GameResultWhereUniqueInput[]
+  }
+
+  export type DyslexiaTestUncheckedCreateNestedManyWithoutChildInput = {
+    create?: XOR<DyslexiaTestCreateWithoutChildInput, DyslexiaTestUncheckedCreateWithoutChildInput> | DyslexiaTestCreateWithoutChildInput[] | DyslexiaTestUncheckedCreateWithoutChildInput[]
+    connectOrCreate?: DyslexiaTestCreateOrConnectWithoutChildInput | DyslexiaTestCreateOrConnectWithoutChildInput[]
+    createMany?: DyslexiaTestCreateManyChildInputEnvelope
+    connect?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -10005,6 +11425,11 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type ChildUpdatedyslexiaWeakSkillsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -10053,6 +11478,20 @@ export namespace Prisma {
     deleteMany?: GameResultScalarWhereInput | GameResultScalarWhereInput[]
   }
 
+  export type DyslexiaTestUpdateManyWithoutChildNestedInput = {
+    create?: XOR<DyslexiaTestCreateWithoutChildInput, DyslexiaTestUncheckedCreateWithoutChildInput> | DyslexiaTestCreateWithoutChildInput[] | DyslexiaTestUncheckedCreateWithoutChildInput[]
+    connectOrCreate?: DyslexiaTestCreateOrConnectWithoutChildInput | DyslexiaTestCreateOrConnectWithoutChildInput[]
+    upsert?: DyslexiaTestUpsertWithWhereUniqueWithoutChildInput | DyslexiaTestUpsertWithWhereUniqueWithoutChildInput[]
+    createMany?: DyslexiaTestCreateManyChildInputEnvelope
+    set?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+    disconnect?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+    delete?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+    connect?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+    update?: DyslexiaTestUpdateWithWhereUniqueWithoutChildInput | DyslexiaTestUpdateWithWhereUniqueWithoutChildInput[]
+    updateMany?: DyslexiaTestUpdateManyWithWhereWithoutChildInput | DyslexiaTestUpdateManyWithWhereWithoutChildInput[]
+    deleteMany?: DyslexiaTestScalarWhereInput | DyslexiaTestScalarWhereInput[]
+  }
+
   export type BadgeUncheckedUpdateManyWithoutChildNestedInput = {
     create?: XOR<BadgeCreateWithoutChildInput, BadgeUncheckedCreateWithoutChildInput> | BadgeCreateWithoutChildInput[] | BadgeUncheckedCreateWithoutChildInput[]
     connectOrCreate?: BadgeCreateOrConnectWithoutChildInput | BadgeCreateOrConnectWithoutChildInput[]
@@ -10093,6 +11532,43 @@ export namespace Prisma {
     update?: GameResultUpdateWithWhereUniqueWithoutChildInput | GameResultUpdateWithWhereUniqueWithoutChildInput[]
     updateMany?: GameResultUpdateManyWithWhereWithoutChildInput | GameResultUpdateManyWithWhereWithoutChildInput[]
     deleteMany?: GameResultScalarWhereInput | GameResultScalarWhereInput[]
+  }
+
+  export type DyslexiaTestUncheckedUpdateManyWithoutChildNestedInput = {
+    create?: XOR<DyslexiaTestCreateWithoutChildInput, DyslexiaTestUncheckedCreateWithoutChildInput> | DyslexiaTestCreateWithoutChildInput[] | DyslexiaTestUncheckedCreateWithoutChildInput[]
+    connectOrCreate?: DyslexiaTestCreateOrConnectWithoutChildInput | DyslexiaTestCreateOrConnectWithoutChildInput[]
+    upsert?: DyslexiaTestUpsertWithWhereUniqueWithoutChildInput | DyslexiaTestUpsertWithWhereUniqueWithoutChildInput[]
+    createMany?: DyslexiaTestCreateManyChildInputEnvelope
+    set?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+    disconnect?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+    delete?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+    connect?: DyslexiaTestWhereUniqueInput | DyslexiaTestWhereUniqueInput[]
+    update?: DyslexiaTestUpdateWithWhereUniqueWithoutChildInput | DyslexiaTestUpdateWithWhereUniqueWithoutChildInput[]
+    updateMany?: DyslexiaTestUpdateManyWithWhereWithoutChildInput | DyslexiaTestUpdateManyWithWhereWithoutChildInput[]
+    deleteMany?: DyslexiaTestScalarWhereInput | DyslexiaTestScalarWhereInput[]
+  }
+
+  export type DyslexiaTestCreateweakSkillsInput = {
+    set: string[]
+  }
+
+  export type ChildCreateNestedOneWithoutDyslexiaTestsInput = {
+    create?: XOR<ChildCreateWithoutDyslexiaTestsInput, ChildUncheckedCreateWithoutDyslexiaTestsInput>
+    connectOrCreate?: ChildCreateOrConnectWithoutDyslexiaTestsInput
+    connect?: ChildWhereUniqueInput
+  }
+
+  export type DyslexiaTestUpdateweakSkillsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ChildUpdateOneRequiredWithoutDyslexiaTestsNestedInput = {
+    create?: XOR<ChildCreateWithoutDyslexiaTestsInput, ChildUncheckedCreateWithoutDyslexiaTestsInput>
+    connectOrCreate?: ChildCreateOrConnectWithoutDyslexiaTestsInput
+    upsert?: ChildUpsertWithoutDyslexiaTestsInput
+    connect?: ChildWhereUniqueInput
+    update?: XOR<XOR<ChildUpdateToOneWithWhereWithoutDyslexiaTestsInput, ChildUpdateWithoutDyslexiaTestsInput>, ChildUncheckedUpdateWithoutDyslexiaTestsInput>
   }
 
   export type ChildCreateNestedOneWithoutBadgesInput = {
@@ -10345,6 +11821,28 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type NestedJsonFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
@@ -10440,6 +11938,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type DyslexiaTestCreateWithoutChildInput = {
+    id?: string
+    score: number
+    risk: string
+    answers: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestCreateweakSkillsInput | string[]
+    createdAt?: Date | string
+  }
+
+  export type DyslexiaTestUncheckedCreateWithoutChildInput = {
+    id?: string
+    score: number
+    risk: string
+    answers: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestCreateweakSkillsInput | string[]
+    createdAt?: Date | string
+  }
+
+  export type DyslexiaTestCreateOrConnectWithoutChildInput = {
+    where: DyslexiaTestWhereUniqueInput
+    create: XOR<DyslexiaTestCreateWithoutChildInput, DyslexiaTestUncheckedCreateWithoutChildInput>
+  }
+
+  export type DyslexiaTestCreateManyChildInputEnvelope = {
+    data: DyslexiaTestCreateManyChildInput | DyslexiaTestCreateManyChildInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BadgeUpsertWithWhereUniqueWithoutChildInput = {
     where: BadgeWhereUniqueInput
     update: XOR<BadgeUpdateWithoutChildInput, BadgeUncheckedUpdateWithoutChildInput>
@@ -10524,6 +12050,143 @@ export namespace Prisma {
     childId?: StringFilter<"GameResult"> | string
   }
 
+  export type DyslexiaTestUpsertWithWhereUniqueWithoutChildInput = {
+    where: DyslexiaTestWhereUniqueInput
+    update: XOR<DyslexiaTestUpdateWithoutChildInput, DyslexiaTestUncheckedUpdateWithoutChildInput>
+    create: XOR<DyslexiaTestCreateWithoutChildInput, DyslexiaTestUncheckedCreateWithoutChildInput>
+  }
+
+  export type DyslexiaTestUpdateWithWhereUniqueWithoutChildInput = {
+    where: DyslexiaTestWhereUniqueInput
+    data: XOR<DyslexiaTestUpdateWithoutChildInput, DyslexiaTestUncheckedUpdateWithoutChildInput>
+  }
+
+  export type DyslexiaTestUpdateManyWithWhereWithoutChildInput = {
+    where: DyslexiaTestScalarWhereInput
+    data: XOR<DyslexiaTestUpdateManyMutationInput, DyslexiaTestUncheckedUpdateManyWithoutChildInput>
+  }
+
+  export type DyslexiaTestScalarWhereInput = {
+    AND?: DyslexiaTestScalarWhereInput | DyslexiaTestScalarWhereInput[]
+    OR?: DyslexiaTestScalarWhereInput[]
+    NOT?: DyslexiaTestScalarWhereInput | DyslexiaTestScalarWhereInput[]
+    id?: StringFilter<"DyslexiaTest"> | string
+    score?: IntFilter<"DyslexiaTest"> | number
+    risk?: StringFilter<"DyslexiaTest"> | string
+    answers?: JsonFilter<"DyslexiaTest">
+    weakSkills?: StringNullableListFilter<"DyslexiaTest">
+    createdAt?: DateTimeFilter<"DyslexiaTest"> | Date | string
+    childId?: StringFilter<"DyslexiaTest"> | string
+  }
+
+  export type ChildCreateWithoutDyslexiaTestsInput = {
+    id?: string
+    clerkId?: string | null
+    email?: string | null
+    name: string
+    avatar?: string
+    level?: number
+    title?: string
+    stars?: number
+    streak?: number
+    coins?: number
+    dyslexiaTestDone?: boolean
+    dyslexiaScore?: number | null
+    dyslexiaRisk?: string | null
+    dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    badges?: BadgeCreateNestedManyWithoutChildInput
+    readingSessions?: ReadingSessionCreateNestedManyWithoutChildInput
+    gameResults?: GameResultCreateNestedManyWithoutChildInput
+  }
+
+  export type ChildUncheckedCreateWithoutDyslexiaTestsInput = {
+    id?: string
+    clerkId?: string | null
+    email?: string | null
+    name: string
+    avatar?: string
+    level?: number
+    title?: string
+    stars?: number
+    streak?: number
+    coins?: number
+    dyslexiaTestDone?: boolean
+    dyslexiaScore?: number | null
+    dyslexiaRisk?: string | null
+    dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    badges?: BadgeUncheckedCreateNestedManyWithoutChildInput
+    readingSessions?: ReadingSessionUncheckedCreateNestedManyWithoutChildInput
+    gameResults?: GameResultUncheckedCreateNestedManyWithoutChildInput
+  }
+
+  export type ChildCreateOrConnectWithoutDyslexiaTestsInput = {
+    where: ChildWhereUniqueInput
+    create: XOR<ChildCreateWithoutDyslexiaTestsInput, ChildUncheckedCreateWithoutDyslexiaTestsInput>
+  }
+
+  export type ChildUpsertWithoutDyslexiaTestsInput = {
+    update: XOR<ChildUpdateWithoutDyslexiaTestsInput, ChildUncheckedUpdateWithoutDyslexiaTestsInput>
+    create: XOR<ChildCreateWithoutDyslexiaTestsInput, ChildUncheckedCreateWithoutDyslexiaTestsInput>
+    where?: ChildWhereInput
+  }
+
+  export type ChildUpdateToOneWithWhereWithoutDyslexiaTestsInput = {
+    where?: ChildWhereInput
+    data: XOR<ChildUpdateWithoutDyslexiaTestsInput, ChildUncheckedUpdateWithoutDyslexiaTestsInput>
+  }
+
+  export type ChildUpdateWithoutDyslexiaTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    avatar?: StringFieldUpdateOperationsInput | string
+    level?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    stars?: IntFieldUpdateOperationsInput | number
+    streak?: IntFieldUpdateOperationsInput | number
+    coins?: IntFieldUpdateOperationsInput | number
+    dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
+    dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
+    dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
+    dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    badges?: BadgeUpdateManyWithoutChildNestedInput
+    readingSessions?: ReadingSessionUpdateManyWithoutChildNestedInput
+    gameResults?: GameResultUpdateManyWithoutChildNestedInput
+  }
+
+  export type ChildUncheckedUpdateWithoutDyslexiaTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    avatar?: StringFieldUpdateOperationsInput | string
+    level?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    stars?: IntFieldUpdateOperationsInput | number
+    streak?: IntFieldUpdateOperationsInput | number
+    coins?: IntFieldUpdateOperationsInput | number
+    dyslexiaTestDone?: BoolFieldUpdateOperationsInput | boolean
+    dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
+    dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
+    dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    badges?: BadgeUncheckedUpdateManyWithoutChildNestedInput
+    readingSessions?: ReadingSessionUncheckedUpdateManyWithoutChildNestedInput
+    gameResults?: GameResultUncheckedUpdateManyWithoutChildNestedInput
+  }
+
   export type ChildCreateWithoutBadgesInput = {
     id?: string
     clerkId?: string | null
@@ -10539,10 +12202,12 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     readingSessions?: ReadingSessionCreateNestedManyWithoutChildInput
     gameResults?: GameResultCreateNestedManyWithoutChildInput
+    dyslexiaTests?: DyslexiaTestCreateNestedManyWithoutChildInput
   }
 
   export type ChildUncheckedCreateWithoutBadgesInput = {
@@ -10560,10 +12225,12 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     readingSessions?: ReadingSessionUncheckedCreateNestedManyWithoutChildInput
     gameResults?: GameResultUncheckedCreateNestedManyWithoutChildInput
+    dyslexiaTests?: DyslexiaTestUncheckedCreateNestedManyWithoutChildInput
   }
 
   export type ChildCreateOrConnectWithoutBadgesInput = {
@@ -10597,10 +12264,12 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     readingSessions?: ReadingSessionUpdateManyWithoutChildNestedInput
     gameResults?: GameResultUpdateManyWithoutChildNestedInput
+    dyslexiaTests?: DyslexiaTestUpdateManyWithoutChildNestedInput
   }
 
   export type ChildUncheckedUpdateWithoutBadgesInput = {
@@ -10618,10 +12287,12 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     readingSessions?: ReadingSessionUncheckedUpdateManyWithoutChildNestedInput
     gameResults?: GameResultUncheckedUpdateManyWithoutChildNestedInput
+    dyslexiaTests?: DyslexiaTestUncheckedUpdateManyWithoutChildNestedInput
   }
 
   export type ChildCreateWithoutReadingSessionsInput = {
@@ -10639,10 +12310,12 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     badges?: BadgeCreateNestedManyWithoutChildInput
     gameResults?: GameResultCreateNestedManyWithoutChildInput
+    dyslexiaTests?: DyslexiaTestCreateNestedManyWithoutChildInput
   }
 
   export type ChildUncheckedCreateWithoutReadingSessionsInput = {
@@ -10660,10 +12333,12 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     badges?: BadgeUncheckedCreateNestedManyWithoutChildInput
     gameResults?: GameResultUncheckedCreateNestedManyWithoutChildInput
+    dyslexiaTests?: DyslexiaTestUncheckedCreateNestedManyWithoutChildInput
   }
 
   export type ChildCreateOrConnectWithoutReadingSessionsInput = {
@@ -10697,10 +12372,12 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     badges?: BadgeUpdateManyWithoutChildNestedInput
     gameResults?: GameResultUpdateManyWithoutChildNestedInput
+    dyslexiaTests?: DyslexiaTestUpdateManyWithoutChildNestedInput
   }
 
   export type ChildUncheckedUpdateWithoutReadingSessionsInput = {
@@ -10718,10 +12395,12 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     badges?: BadgeUncheckedUpdateManyWithoutChildNestedInput
     gameResults?: GameResultUncheckedUpdateManyWithoutChildNestedInput
+    dyslexiaTests?: DyslexiaTestUncheckedUpdateManyWithoutChildNestedInput
   }
 
   export type ChildCreateWithoutGameResultsInput = {
@@ -10739,10 +12418,12 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     badges?: BadgeCreateNestedManyWithoutChildInput
     readingSessions?: ReadingSessionCreateNestedManyWithoutChildInput
+    dyslexiaTests?: DyslexiaTestCreateNestedManyWithoutChildInput
   }
 
   export type ChildUncheckedCreateWithoutGameResultsInput = {
@@ -10760,10 +12441,12 @@ export namespace Prisma {
     dyslexiaScore?: number | null
     dyslexiaRisk?: string | null
     dyslexiaTestedAt?: Date | string | null
+    dyslexiaWeakSkills?: ChildCreatedyslexiaWeakSkillsInput | string[]
     createdAt?: Date | string
     updatedAt?: Date | string
     badges?: BadgeUncheckedCreateNestedManyWithoutChildInput
     readingSessions?: ReadingSessionUncheckedCreateNestedManyWithoutChildInput
+    dyslexiaTests?: DyslexiaTestUncheckedCreateNestedManyWithoutChildInput
   }
 
   export type ChildCreateOrConnectWithoutGameResultsInput = {
@@ -10797,10 +12480,12 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     badges?: BadgeUpdateManyWithoutChildNestedInput
     readingSessions?: ReadingSessionUpdateManyWithoutChildNestedInput
+    dyslexiaTests?: DyslexiaTestUpdateManyWithoutChildNestedInput
   }
 
   export type ChildUncheckedUpdateWithoutGameResultsInput = {
@@ -10818,10 +12503,12 @@ export namespace Prisma {
     dyslexiaScore?: NullableIntFieldUpdateOperationsInput | number | null
     dyslexiaRisk?: NullableStringFieldUpdateOperationsInput | string | null
     dyslexiaTestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dyslexiaWeakSkills?: ChildUpdatedyslexiaWeakSkillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     badges?: BadgeUncheckedUpdateManyWithoutChildNestedInput
     readingSessions?: ReadingSessionUncheckedUpdateManyWithoutChildNestedInput
+    dyslexiaTests?: DyslexiaTestUncheckedUpdateManyWithoutChildNestedInput
   }
 
   export type BadgeCreateManyChildInput = {
@@ -10845,6 +12532,15 @@ export namespace Prisma {
     id?: string
     gameTitle: string
     score?: number
+    createdAt?: Date | string
+  }
+
+  export type DyslexiaTestCreateManyChildInput = {
+    id?: string
+    score: number
+    risk: string
+    answers: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestCreateweakSkillsInput | string[]
     createdAt?: Date | string
   }
 
@@ -10920,6 +12616,33 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DyslexiaTestUpdateWithoutChildInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    risk?: StringFieldUpdateOperationsInput | string
+    answers?: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestUpdateweakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DyslexiaTestUncheckedUpdateWithoutChildInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    risk?: StringFieldUpdateOperationsInput | string
+    answers?: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestUpdateweakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DyslexiaTestUncheckedUpdateManyWithoutChildInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: IntFieldUpdateOperationsInput | number
+    risk?: StringFieldUpdateOperationsInput | string
+    answers?: JsonNullValueInput | InputJsonValue
+    weakSkills?: DyslexiaTestUpdateweakSkillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -10933,6 +12656,10 @@ export namespace Prisma {
      * @deprecated Use ChildDefaultArgs instead
      */
     export type ChildArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ChildDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use DyslexiaTestDefaultArgs instead
+     */
+    export type DyslexiaTestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DyslexiaTestDefaultArgs<ExtArgs>
     /**
      * @deprecated Use BadgeDefaultArgs instead
      */
