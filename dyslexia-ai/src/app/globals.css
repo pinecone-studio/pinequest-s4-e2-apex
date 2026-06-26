@@ -1,0 +1,101 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-lexend), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #2d2d2d;
+  background: #e7ddd0;
+}
+
+/* Center the app in a phone-sized frame on larger screens. */
+.frame-outer {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 100dvh;
+  background: #e7ddd0;
+}
+
+.phone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 430px;
+  min-height: 100dvh;
+  background: #f5efe6;
+  overflow: hidden;
+}
+
+@media (min-width: 480px) {
+  .phone {
+    min-height: 100dvh;
+    box-shadow: 0 20px 60px rgba(45, 35, 30, 0.18);
+  }
+}
+
+input::placeholder {
+  color: var(--placeholder-color, #b0a89e);
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Spinner for ActivityIndicator */
+.lexi-spinner {
+  display: inline-block;
+  border-style: solid;
+  border-width: 3px;
+  border-radius: 9999px;
+  animation: lexi-spin 0.8s linear infinite;
+}
+
+@keyframes lexi-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* LexiBot mascot motion */
+@keyframes lexi-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes lexi-bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-6px) rotate(3deg); }
+}
+.lexi-anim-float { animation: lexi-float 3s ease-in-out infinite; }
+.lexi-anim-bob { animation: lexi-bob 2.6s ease-in-out infinite; }
+
+/* Practice waveform */
+@keyframes lexi-wave {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+.lexi-wave-bar { animation: lexi-wave 1s ease-in-out infinite; }
+
+/* Splash shimmer */
+@keyframes lexi-shimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Dyslexia test task fade-in */
+@keyframes lexi-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.lexi-fade { animation: lexi-fade 0.3s ease; }

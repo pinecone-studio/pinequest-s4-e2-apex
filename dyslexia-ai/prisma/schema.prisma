@@ -1,0 +1,113 @@
+// Lexi AI — data model (ported from apex/prisma/schema.prisma).
+// Runs inside the Next.js app so the API + DB deploy together on Vercel.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// A learner profile (the child using the app)
+model Child {
+  id      String @id @default(cuid())
+  clerkId String? @unique
+  email   String?
+  name    String
+  avatar  String @default("🦊")
+  level   Int    @default(1)
+  title   String @default("Унших аялагч")
+  stars   Int    @default(0)
+  streak  Int    @default(0)
+  coins   Int    @default(0)
+  exp     Int    @default(0)
+
+  dyslexiaTestDone   Boolean   @default(false)
+  dyslexiaScore      Int?
+  dyslexiaRisk       String?
+  dyslexiaTestedAt   DateTime?
+  dyslexiaWeakSkills String[]  @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  badges          Badge[]
+  readingSessions ReadingSession[]
+  gameResults     GameResult[]
+  dyslexiaTests   DyslexiaTest[]
+}
+
+model DyslexiaTest {
+  id         String   @id @default(cuid())
+  score      Int
+  risk       String
+  answers    Json
+  weakSkills String[]
+  createdAt  DateTime @default(now())
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
+}
+
+model Badge {
+  id       String  @id @default(cuid())
+  key      String
+  label    String
+  emoji    String
+  unlocked Boolean @default(false)
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
+
+  @@unique([childId, key])
+}
+
+model ReadingSession {
+  id          String   @id @default(cuid())
+  accuracy    Float    @default(0)
+  durationMin Int      @default(0)
+  wordsRead   Int      @default(0)
+  lessonId    String?
+  createdAt   DateTime @default(now())
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
+}
+
+model Lesson {
+  id        String   @id @default(cuid())
+  order     Int      @unique
+  letter    String
+  title     String
+  emoji     String   @default("📖")
+  createdAt DateTime @default(now())
+}
+
+model Story {
+  id       String  @id @default(cuid())
+  title    String
+  emoji    String
+  level    String
+  category String
+  hasAudio Boolean @default(true)
+  minutes  Int     @default(5)
+}
+
+model Game {
+  id       String @id @default(cuid())
+  title    String
+  subtitle String
+  emoji    String
+}
+
+model GameResult {
+  id        String   @id @default(cuid())
+  gameTitle String
+  score     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
+}
