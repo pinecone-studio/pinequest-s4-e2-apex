@@ -1,0 +1,124 @@
+// Lexi AI — data model (maps to the screens in the Expo app)
+// learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows"]
+  output        = "../src/generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// A learner profile (the child using the app)
+model Child {
+  id        String   @id @default(cuid())
+  clerkId   String?  @unique // the Clerk user this learner belongs to
+  email     String?
+  name      String
+  avatar    String   @default("🦊")
+  level     Int      @default(1)
+  title     String   @default("Унших аялагч")
+  stars     Int      @default(0)
+  streak    Int      @default(0)
+  coins     Int      @default(0)
+  exp       Int      @default(0) // туршлагын оноо — цугларах тусам түвшин ахина
+
+  // Lexi-AI дислекси урьдчилсан шалгалт (шинэ хэрэглэгч анх орж ирэхэд өгнө)
+  dyslexiaTestDone   Boolean   @default(false)
+  dyslexiaScore      Int? // зөв хариултын тоо (0..6)
+  dyslexiaRisk       String? // 'low' | 'medium' | 'high'
+  dyslexiaTestedAt   DateTime?
+  // Хамгийн сүүлийн шалгалтаар илэрсэн сул ур чадварууд (хичээлийг тааруулахад)
+  dyslexiaWeakSkills String[]  @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  badges          Badge[]
+  readingSessions ReadingSession[]
+  gameResults     GameResult[]
+  dyslexiaTests   DyslexiaTest[]
+}
+
+/// Дислекси шалгалтын нэг оролдлогын дэлгэрэнгүй үр дүн
+model DyslexiaTest {
+  id         String   @id @default(cuid())
+  score      Int // зөв хариултын тоо (0..6)
+  risk       String // 'low' | 'medium' | 'high'
+  answers    Json // [{ type, correct }] — даалгавар бүрийн хариу
+  weakSkills String[] // буруу хариулсан даалгаврын төрлүүд
+  createdAt  DateTime @default(now())
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
+}
+
+/// An earned (or locked) achievement badge
+model Badge {
+  id       String  @id @default(cuid())
+  key      String
+  label    String
+  emoji    String
+  unlocked Boolean @default(false)
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
+
+  @@unique([childId, key])
+}
+
+/// One reading practice session — drives the Parent dashboard stats
+model ReadingSession {
+  id          String   @id @default(cuid())
+  accuracy    Float    @default(0) // 0..100
+  durationMin Int      @default(0)
+  wordsRead   Int      @default(0)
+  lessonId    String?
+  createdAt   DateTime @default(now())
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
+}
+
+/// A reading lesson (the Reading screen)
+model Lesson {
+  id        String   @id @default(cuid())
+  order     Int      @unique
+  letter    String
+  title     String
+  emoji     String   @default("📖")
+  createdAt DateTime @default(now())
+}
+
+/// A story in the Story World screen
+model Story {
+  id       String  @id @default(cuid())
+  title    String
+  emoji    String
+  level    String
+  category String
+  hasAudio Boolean @default(true)
+  minutes  Int     @default(5)
+}
+
+/// A learning game tile
+model Game {
+  id       String @id @default(cuid())
+  title    String
+  subtitle String
+  emoji    String
+}
+
+/// Result of playing a game
+model GameResult {
+  id        String   @id @default(cuid())
+  gameTitle String
+  score     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  childId String
+}
