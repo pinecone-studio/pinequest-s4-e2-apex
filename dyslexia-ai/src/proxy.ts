@@ -3,8 +3,18 @@ import type { NextRequest } from 'next/server';
 
 const hasKey = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-// Sign-in / sign-up + the health check are reachable while signed out.
-const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)', '/api/health']);
+// Нээлттэй: нэвтрэх хуудсууд + өгөгдлийн API (утасны апп болон web хоёулаа дууддаг).
+// AI/TTS endpoint-ууд (reading-task, tts, stt, word-list) ХАМГААЛАЛТТАЙ үлдэнэ —
+// OpenAI/Chimege quota-г хамгаална (зөвхөн нэвтэрсэн web хэрэглэгч ашиглана).
+const isPublicRoute = createRouteMatcher([
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/api/health',
+  '/api/me(.*)',
+  '/api/lessons',
+  '/api/stories',
+  '/api/games',
+]);
 
 // Without a Clerk key we can't run clerkMiddleware, so fall back to a no-op so
 // the app still renders the SetupNotice instead of 500-ing on every request.

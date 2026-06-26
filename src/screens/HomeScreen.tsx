@@ -2,14 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import StatusBarRow from '../components/StatusBarRow';
-import LexiBot from '../components/LexiBot';
 import AppIcon, { AppIconName } from '../components/AppIcon';
 import { colors, fonts, shadows } from '../theme';
 import { useChild } from '../hooks/useChild';
 import { expProgress } from '../lib/api';
 
 const cards: { to: string; bg: string; icon: AppIconName; color: string; title: string; sub: string }[] = [
-  { to: 'Reading', bg: colors.sand.lightest, icon: 'book', color: '#A8895F', title: 'Унших эхлэх', sub: '12-оос 6-р хичээл' },
+  { to: 'Reading', bg: colors.sand.lightest, icon: 'book', color: '#A8895F', title: 'Унших хичээл', sub: 'AI-аар тохируулсан дасгал' },
   { to: 'Games', bg: colors.peach.lightest, icon: 'game', color: colors.peach.dark, title: 'Сургалтын тоглоом', sub: '4 хөгжилтэй тоглоом' },
   { to: 'Stories', bg: colors.slate.light, icon: 'library', color: colors.slate.dark, title: 'Үлгэрийн ертөнц', sub: '12 үлгэр' },
   { to: 'DyslexiaTest', bg: colors.lavender.lightest, icon: 'brain', color: colors.lavender.dark, title: 'Дислекси шалгалт', sub: '5 мин · 4-7 нас' },
@@ -71,32 +70,18 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           </View>
         </View>
 
-        {/* AI Buddy banner */}
-        <LinearGradient
-          colors={['#8B7AB8', '#A090C8']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.banner}
-        >
-          <View style={{ flex: 1 }}>
-            <Text style={styles.bannerTitle}>AI Унших Найз</Text>
-            <Text style={styles.bannerSub}>Лекситэй чанга унш!</Text>
-            <Pressable style={styles.bannerBtn} onPress={() => navigation.navigate('Practice')}>
-              <Text style={styles.bannerBtnText}>Эхлэх →</Text>
-            </Pressable>
-          </View>
-          <LexiBot size="sm" animate="float" />
-        </LinearGradient>
-
-        {/* Quick access grid */}
+        {/* Quick access — мөр бүрд нэг карт */}
         <View style={styles.grid}>
-          {cards.map(({ to, icon, title, sub }, i) => (
+          {cards.map(({ to, icon, title, sub, bg, color }, i) => (
             <Pressable key={i} style={styles.gridCard} onPress={() => navigation.navigate(to)}>
-              <View style={[styles.gridIcon, { backgroundColor: colors.warm.beige }]}>
-                <AppIcon name={icon} size={24} color={cards[i].color} />
+              <View style={[styles.gridIcon, { backgroundColor: bg }]}>
+                <AppIcon name={icon} size={26} color={color} />
               </View>
-              <Text style={styles.gridTitle}>{title}</Text>
-              <Text style={styles.gridSub}>{sub}</Text>
+              <View style={styles.gridText}>
+                <Text style={styles.gridTitle}>{title}</Text>
+                <Text style={styles.gridSub}>{sub}</Text>
+              </View>
+              <AppIcon name="arrowForward" size={20} color={colors.warm.lightgray} />
             </Pressable>
           ))}
         </View>
@@ -157,22 +142,25 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   bannerBtnText: { fontFamily: fonts.fredoka.semibold, fontSize: 14, color: colors.warm.text },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 16 },
+  grid: { marginTop: 16, gap: 12 },
   gridCard: {
-    width: '48%',
+    width: '100%',
     backgroundColor: colors.warm.card,
     borderRadius: 24,
     padding: 16,
-    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
     ...shadows.card,
   },
   gridIcon: {
-    width: 44,
-    height: 44,
+    width: 52,
+    height: 52,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  gridTitle: { fontFamily: fonts.fredoka.semibold, fontSize: 16, color: colors.warm.text, marginTop: 12 },
-  gridSub: { fontFamily: fonts.lexend.regular, fontSize: 11, color: colors.warm.gray, marginTop: 2 },
+  gridText: { flex: 1 },
+  gridTitle: { fontFamily: fonts.fredoka.semibold, fontSize: 16, color: colors.warm.text },
+  gridSub: { fontFamily: fonts.lexend.regular, fontSize: 12, color: colors.warm.gray, marginTop: 2 },
 });
