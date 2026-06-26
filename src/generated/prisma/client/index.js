@@ -222,7 +222,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/togtokhbayarbatsukh/Desktop/pinequest-s4-e2-team-1/src/generated/prisma/client",
+      "value": "/Users/togtokhbayarbatsukh/Desktop/pinequest/apex/src/generated/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -240,12 +240,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/togtokhbayarbatsukh/Desktop/pinequest-s4-e2-team-1/prisma/schema.prisma",
+    "sourceFilePath": "/Users/togtokhbayarbatsukh/Desktop/pinequest/apex/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../../prisma",
   "clientVersion": "5.22.0",
@@ -254,6 +253,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
