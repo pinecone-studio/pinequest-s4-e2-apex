@@ -19,9 +19,9 @@ type GameDef = {
 };
 
 const GAMES: GameDef[] = [
-  { emoji: '🔤', title: 'Үсэг тааруулах', sub: 'Үсгийг авиатай тааруул', grad: ['#7A6AA8', '#8B7AB8'], coins: 15, exp: 20, soon: true },
+  { emoji: '🔤', title: 'Үсэг тааруулах', sub: 'Зургийн эхний үсгийг ол', grad: ['#7A6AA8', '#8B7AB8'], coins: 15, exp: 20, route: 'LetterMatch' },
   { emoji: '🧱', title: 'Үсгийг зөв байрлуулах', sub: 'Үгийн үсгийг зөв дараалуул', grad: ['#7A9E74', '#8FB487'], coins: 15, exp: 20, route: 'WordBuild' },
-  { emoji: '🕵️', title: 'Авианы мөрдөгч', sub: 'Сонсоод үсгийг сонго', grad: ['#6094A8', '#7AAEC0'], coins: 15, exp: 20, soon: true },
+  { emoji: '🕵️', title: 'Авианы мөрдөгч', sub: 'Сонсоод үсгийг сонго', grad: ['#6094A8', '#7AAEC0'], coins: 15, exp: 20, route: 'SoundDetective' },
 ];
 
 export default function GamesScreen({ navigation }: { navigation: any }) {

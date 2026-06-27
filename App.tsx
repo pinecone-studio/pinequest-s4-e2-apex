@@ -39,6 +39,8 @@ import ParentScreen from './src/screens/ParentScreen';
 import DyslexiaTestScreen from './src/screens/DyslexiaTestScreen';
 import WordBuildScreen from './src/screens/WordBuildScreen';
 import DailyScreen from './src/screens/DailyScreen';
+import LetterMatchScreen from './src/screens/LetterMatchScreen';
+import SoundDetectiveScreen from './src/screens/SoundDetectiveScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 
@@ -74,6 +76,8 @@ function AppStack() {
       <Stack.Screen name="DyslexiaTest" component={DyslexiaTestScreen} />
       <Stack.Screen name="WordBuild" component={WordBuildScreen} />
       <Stack.Screen name="Daily" component={DailyScreen} />
+      <Stack.Screen name="LetterMatch" component={LetterMatchScreen} />
+      <Stack.Screen name="SoundDetective" component={SoundDetectiveScreen} />
     </Stack.Navigator>
   );
 }
