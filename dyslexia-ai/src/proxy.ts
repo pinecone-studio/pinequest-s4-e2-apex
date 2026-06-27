@@ -14,6 +14,7 @@ const isPublicRoute = createRouteMatcher([
   '/api/lessons',
   '/api/stories',
   '/api/games',
+  '/api/tts', // утасны «Авианы мөрдөгч» тоглоом Chimege дуу дуудна
 ]);
 
 // Without a Clerk key we can't run clerkMiddleware, so fall back to a no-op so
