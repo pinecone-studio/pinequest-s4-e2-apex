@@ -7,13 +7,24 @@ import { colors, fonts, shadows } from '../theme';
 import { useChild } from '../hooks/useChild';
 import { api, expProgress } from '../lib/api';
 
-const GAMES = [
-  { emoji: '🔤', title: 'Үсэг тааруулах', sub: 'Үсгийг авиатай тааруул', grad: ['#7A6AA8', '#8B7AB8'], coins: 15, exp: 20 },
-  { emoji: '🧱', title: 'Үг угсрах', sub: 'Энгийн үг угсар', grad: ['#7A9E74', '#8FB487'], coins: 15, exp: 20 },
-  { emoji: '🕵️', title: 'Авианы мөрдөгч', sub: 'Сонсоод үсгийг сонго', grad: ['#6094A8', '#7AAEC0'], coins: 15, exp: 20 },
+type GameDef = {
+  emoji: string;
+  title: string;
+  sub: string;
+  grad: string[];
+  coins: number;
+  exp: number;
+  route?: string;
+  soon?: boolean;
+};
+
+const GAMES: GameDef[] = [
+  { emoji: '🔤', title: 'Үсэг тааруулах', sub: 'Үсгийг авиатай тааруул', grad: ['#7A6AA8', '#8B7AB8'], coins: 15, exp: 20, soon: true },
+  { emoji: '🧱', title: 'Үсгийг зөв байрлуулах', sub: 'Үгийн үсгийг зөв дараалуул', grad: ['#7A9E74', '#8FB487'], coins: 15, exp: 20, route: 'WordBuild' },
+  { emoji: '🕵️', title: 'Авианы мөрдөгч', sub: 'Сонсоод үсгийг сонго', grad: ['#6094A8', '#7AAEC0'], coins: 15, exp: 20, soon: true },
 ];
 
-export default function GamesScreen() {
+export default function GamesScreen({ navigation }: { navigation: any }) {
   const { child, refresh } = useChild();
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -33,6 +44,19 @@ export default function GamesScreen() {
     } finally {
       setBusy(false);
     }
+  };
+
+  const onGame = (game: GameDef) => {
+    if (game.route) {
+      navigation.navigate(game.route);
+      return;
+    }
+    if (game.soon) {
+      setToast(`🚧 «${game.title}» тун удахгүй нэмэгдэнэ`);
+      setTimeout(() => setToast(null), 2200);
+      return;
+    }
+    award(game.coins, game.exp, game.title);
   };
 
   const stats: { icon: AppIconName; color: string; val: string; label: string; bg: string }[] = [
@@ -80,34 +104,29 @@ export default function GamesScreen() {
           </View>
         )}
 
-        {/* Game grid */}
+        {/* Game grid — «тун удахгүй» тоглоомуудыг түр нуусан */}
         <View style={styles.grid}>
-          {GAMES.map(({ emoji, title, sub, grad, coins, exp }) => (
-            <Pressable
-              key={title}
-              style={styles.gameCard}
-              disabled={busy}
-              onPress={() => award(coins, exp, title)}
-            >
+          {GAMES.filter((g) => !g.soon).map((game) => (
+            <Pressable key={game.title} style={styles.gameCard} disabled={busy} onPress={() => onGame(game)}>
               <LinearGradient
-                colors={grad as [string, string]}
+                colors={game.grad as [string, string]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.gameInner}
               >
-                <Text style={{ fontSize: 36 }}>{emoji}</Text>
+                <Text style={{ fontSize: 36 }}>{game.emoji}</Text>
                 <View style={styles.gameTextWrap}>
-                  <Text style={styles.gameTitle}>{title}</Text>
-                  <Text style={styles.gameSub}>{sub}</Text>
+                  <Text style={styles.gameTitle}>{game.title}</Text>
+                  <Text style={styles.gameSub}>{game.sub}</Text>
                 </View>
-                <Text style={styles.gameReward}>+{exp} EXP</Text>
+                <Text style={styles.gameReward}>{game.route ? 'Тоглох →' : `+${game.exp} EXP`}</Text>
               </LinearGradient>
             </Pressable>
           ))}
         </View>
 
         {/* Daily challenge */}
-        <Pressable style={styles.challenge} disabled={busy} onPress={() => award(30, 50, 'Өдрийн сорил')}>
+        <Pressable style={styles.challenge} onPress={() => navigation.navigate('Daily')}>
           <AppIcon name="party" size={28} color={colors.peach.dark} />
           <View style={{ flex: 1 }}>
             <Text style={styles.challengeTitle}>Өдрийн сорил</Text>

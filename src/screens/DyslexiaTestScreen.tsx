@@ -10,7 +10,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { colors, fonts, shadows } from '../theme';
-import { useSpeech } from '../hooks/useSpeech';
 import { useChild } from '../hooks/useChild';
 import { api, DyslexiaRisk } from '../lib/api';
 import { SKILL_AREAS, SkillArea } from '../lib/dyslexia';
@@ -79,7 +78,6 @@ export default function DyslexiaTestScreen() {
   const route = useRoute<any>();
   const onboarding = route.params?.onboarding === true;
   const { child, refresh } = useChild();
-  const { speak, isPlaying } = useSpeech();
   const [currentTask, setCurrentTask] = useState(0);
   const [answers, setAnswers] = useState<TaskAnswer[]>(Array(6).fill(null));
   const [showResult, setShowResult] = useState(false);
@@ -87,12 +85,6 @@ export default function DyslexiaTestScreen() {
   const fadeAnim = useState(new Animated.Value(1))[0];
 
   const task = TASKS[currentTask];
-
-  useEffect(() => {
-    if (!showResult && task) {
-      speak(task.instruction);
-    }
-  }, [currentTask, showResult]);
 
   const handleAnswer = (isCorrect: boolean) => {
     const newAnswers = [...answers];
@@ -119,12 +111,6 @@ export default function DyslexiaTestScreen() {
         setShowResult(true);
       }
     }, 300);
-  };
-
-  const replayAudio = () => {
-    if (task) {
-      speak(task.instruction);
-    }
   };
 
   const wrongCount = answers.filter((a) => a === false).length;
@@ -235,18 +221,13 @@ export default function DyslexiaTestScreen() {
             Даалгавар {currentTask + 1} / 6
           </Text>
         </View>
-        <TouchableOpacity onPress={replayAudio} disabled={isPlaying}>
-          <Text style={[styles.speakerButton, isPlaying && styles.speakerDisabled]}>
-            🔊
-          </Text>
-        </TouchableOpacity>
+        <View style={{ width: 32 }} />
       </View>
 
       <Animated.View style={[styles.taskContainer, { opacity: fadeAnim }]}>
         <View style={styles.instructionBox}>
           <View style={styles.instructionHeader}>
             <Text style={styles.instructionLabel}>📖 Заавар:</Text>
-            {isPlaying && <Text style={styles.playingIndicator}>...</Text>}
           </View>
           <Text style={styles.instruction}>{task.instruction}</Text>
           <Text style={styles.instructionNote}>
