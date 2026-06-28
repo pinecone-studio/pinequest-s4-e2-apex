@@ -4,14 +4,23 @@ import { useAuth, useUser } from '@clerk/nextjs';
 import { View, Text, StyleSheet, ScrollView, Pressable } from '../../../rn/primitives';
 import { LinearGradient } from '../../../rn/LinearGradient';
 import StatusBarRow from '../../../components/StatusBarRow';
-import AppIcon from '../../../components/AppIcon';
+import AppIcon, { type AppIconName } from '../../../components/AppIcon';
 import { colors, fonts, shadows } from '../../../theme';
 import { useChild } from '../../../hooks/useChild';
+import { expProgress, levelBadge } from '../../../lib/api';
+import LevelBadge from '../../../components/LevelBadge';
 
 export default function ProfileScreen() {
   const { signOut } = useAuth();
   const { user } = useUser();
   const { child } = useChild();
+  const { level } = expProgress(child?.exp ?? 0);
+
+  const stats: { icon: AppIconName; color: string; val: string; label: string }[] = [
+    { icon: 'coin', color: '#E0A82E', val: String(child?.coins ?? 0), label: 'Зоос' },
+    { icon: 'flame', color: '#E8835A', val: String(child?.streak ?? 0), label: 'Дараалал' },
+  ];
+
   return (
     <View style={styles.root}>
       <StatusBarRow />
@@ -33,14 +42,30 @@ export default function ProfileScreen() {
             <Text style={{ fontSize: 56 }}>{child?.avatar ?? '🦊'}</Text>
           </View>
           <Text style={styles.name}>{child?.name ?? '...'}</Text>
+          <View style={styles.badgeRow}>
+            <LevelBadge level={level} />
+            <Text style={styles.tierName}>{levelBadge(level).name}</Text>
+          </View>
           <View style={styles.level}>
             <Text style={styles.levelText}>
-              {child?.level ?? 1}-р түвшин · {child?.title ?? 'Унших аялагч'}
+              {level}-р түвшин · {child?.title ?? 'Унших аялагч'}
             </Text>
           </View>
         </LinearGradient>
 
-        {/* Account */}
+        {/* Stats */}
+        <View style={styles.statsRow}>
+          {stats.map(({ icon, color, val, label }) => (
+            <View key={label} style={styles.statCard}>
+              <View style={styles.statValRow}>
+                <AppIcon name={icon} size={18} color={color} />
+                <Text style={styles.statVal}>{val}</Text>
+              </View>
+              <Text style={styles.statLabel}>{label}</Text>
+            </View>
+          ))}
+        </View>
+
         {user?.username ? <Text style={styles.account}>Нэвтэрсэн: @{user.username}</Text> : null}
         <Pressable style={styles.signOut} onPress={() => signOut({ redirectUrl: '/sign-in' })}>
           <AppIcon name="logout" size={18} color={colors.peach.dark} />
@@ -68,8 +93,15 @@ const styles = StyleSheet.create({
     ...shadows.card,
   },
   name: { fontFamily: fonts.fredoka.bold, fontSize: 20, color: '#fff', marginTop: 12 },
+  badgeRow: { alignItems: 'center', gap: 4, marginTop: 12 },
+  tierName: { fontFamily: fonts.fredoka.semibold, fontSize: 14, color: '#fff' },
   level: { backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 12, marginTop: 4 },
   levelText: { fontFamily: fonts.lexend.semibold, fontSize: 12, color: '#fff' },
+  statsRow: { flexDirection: 'row', gap: 8, marginTop: 16 },
+  statCard: { flex: 1, borderRadius: 16, padding: 12, alignItems: 'center', backgroundColor: colors.warm.card, ...shadows.cardSm },
+  statValRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  statVal: { fontFamily: fonts.fredoka.bold, fontSize: 18, color: colors.warm.text },
+  statLabel: { fontFamily: fonts.lexend.regular, fontSize: 10, color: colors.warm.gray },
   account: { fontFamily: fonts.lexend.regular, fontSize: 13, color: colors.warm.gray, textAlign: 'center', marginTop: 24 },
   signOut: {
     marginTop: 12,

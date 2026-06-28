@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { View, Text, StyleSheet, ScrollView, Pressable } from '../../../rn/primitives';
 import { LinearGradient } from '../../../rn/LinearGradient';
 import StatusBarRow from '../../../components/StatusBarRow';
-import AppIcon, { type AppIconName } from '../../../components/AppIcon';
+import AppIcon from '../../../components/AppIcon';
 import { colors, fonts, shadows } from '../../../theme';
 import { useChild } from '../../../hooks/useChild';
 import { api, expProgress } from '../../../lib/api';
@@ -67,31 +67,12 @@ export default function GamesScreen() {
     }
   };
 
-  const stats: { icon: AppIconName; color: string; val: string; label: string; bg: string }[] = [
-    { icon: 'star', color: '#F5B945', val: String(child?.stars ?? 0), label: 'Од', bg: colors.sand.lightest },
-    { icon: 'coin', color: '#E0A82E', val: String(child?.coins ?? 0), label: 'Зоос', bg: colors.sand.light },
-    { icon: 'medal', color: colors.lavender.dark, val: String(level), label: 'Түвшин', bg: colors.lavender.light },
-  ];
-
   return (
     <View style={styles.root}>
       <StatusBarRow />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Сургалтын тоглоом</Text>
         <Text style={styles.subtitle}>Тоглоод шагнал ав!</Text>
-
-        {/* Stats */}
-        <View style={styles.statsRow}>
-          {stats.map(({ icon, color, val, label, bg }) => (
-            <View key={label} style={[styles.statCard, { backgroundColor: bg }]}>
-              <View style={styles.statValRow}>
-                <AppIcon name={icon} size={18} color={color} />
-                <Text style={styles.statVal}>{val}</Text>
-              </View>
-              <Text style={styles.statLabel}>{label}</Text>
-            </View>
-          ))}
-        </View>
 
         {/* EXP progress to next level */}
         <View style={styles.expCard}>
@@ -156,11 +137,6 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 24 },
   title: { fontFamily: fonts.fredoka.bold, fontSize: 24, color: colors.warm.text },
   subtitle: { fontFamily: fonts.lexend.regular, fontSize: 14, color: colors.warm.gray },
-  statsRow: { flexDirection: 'row', gap: 8, marginTop: 16 },
-  statCard: { flex: 1, borderRadius: 16, padding: 10, alignItems: 'center' },
-  statValRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  statVal: { fontFamily: fonts.fredoka.bold, fontSize: 18, color: colors.warm.text },
-  statLabel: { fontFamily: fonts.lexend.regular, fontSize: 10, color: colors.warm.gray },
   expCard: { backgroundColor: colors.warm.card, borderRadius: 16, padding: 14, marginTop: 12, ...shadows.card },
   expHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   expLabel: { fontFamily: fonts.fredoka.semibold, fontSize: 13, color: colors.warm.text },

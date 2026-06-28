@@ -7,7 +7,8 @@ import StatusBarRow from '../../../components/StatusBarRow';
 import AppIcon, { type AppIconName } from '../../../components/AppIcon';
 import { colors, fonts, shadows } from '../../../theme';
 import { useChild } from '../../../hooks/useChild';
-import { expProgress } from '../../../lib/api';
+import { expProgress, levelBadge } from '../../../lib/api';
+import LevelBadge from '../../../components/LevelBadge';
 
 const PATHS: Record<string, string> = {
   Reading: '/reading',
@@ -34,12 +35,12 @@ export default function HomeScreen() {
   const router = useRouter();
   const { child } = useChild();
 
+  const { level, current, needed } = expProgress(child?.exp ?? 0);
   const stats: [string, string][] = [
-    [String(child?.stars ?? 0), 'Од'],
+    [levelBadge(level).name, `${level}-р түвшин`],
     [String(child?.coins ?? 0), 'Зоос'],
     [String(child?.streak ?? 0), 'Дараалал'],
   ];
-  const { level, current, needed } = expProgress(child?.exp ?? 0);
 
   return (
     <View style={styles.root}>
@@ -60,7 +61,11 @@ export default function HomeScreen() {
         <View style={styles.statsRow}>
           {stats.map(([val, label], i) => (
             <View key={label} style={styles.statCard}>
-              <AppIcon name={STAT_ICONS[i].icon} size={20} color={STAT_ICONS[i].color} />
+              {i === 0 ? (
+                <LevelBadge level={level} size={28} />
+              ) : (
+                <AppIcon name={STAT_ICONS[i].icon} size={20} color={STAT_ICONS[i].color} />
+              )}
               <Text style={styles.statVal}>{val}</Text>
               <Text style={styles.statLabel}>{label}</Text>
             </View>

@@ -50,16 +50,29 @@ export type Child = {
 
 export type DyslexiaRisk = 'low' | 'medium' | 'high';
 
-// Туршлагын оноо (exp) → түвшин ба прогресс. Server-тэй ижил логик (100 exp = 1 түвшин).
-export const EXP_PER_LEVEL = 100;
+// Туршлагын оноо (exp) → түвшин ба прогресс. Server-тэй ижил логик (50·N·(N-1)).
+export const expToReach = (level: number) => 50 * level * (level - 1);
 export function expProgress(exp: number) {
   const safe = Math.max(0, exp || 0);
+  let level = 1;
+  while (safe >= expToReach(level + 1)) level++;
+  const base = expToReach(level);
   return {
-    level: Math.floor(safe / EXP_PER_LEVEL) + 1,
-    current: safe % EXP_PER_LEVEL, // одоогийн түвшин дэх exp
-    needed: EXP_PER_LEVEL,
+    level,
+    current: safe - base,
+    needed: expToReach(level + 1) - base,
   };
 }
+
+// Түвшингээс шууд тооцох tier badge — DB-д хадгалах шаардлагагүй
+const TIERS = [
+  { min: 20, name: 'Алмаз', color: '#5AA9E6', glyph: '💎' },
+  { min: 15, name: 'Алт', color: '#E6B84F', glyph: '🥇' },
+  { min: 10, name: 'Мөнгө', color: '#9AA7B4', glyph: '🥈' },
+  { min: 5, name: 'Хүрэл', color: '#C08457', glyph: '🥉' },
+  { min: 1, name: 'Шинэхэн', color: '#8FB487', glyph: '🌱' },
+];
+export const levelBadge = (level: number) => TIERS.find((t) => level >= t.min) ?? TIERS[TIERS.length - 1];
 
 // Тест дуусахад илгээх даалгавар бүрийн хариу.
 export type DyslexiaAnswer = { type: string; correct: boolean };
@@ -77,7 +90,7 @@ export type Stats = {
 
 // --- API methods ---
 export const api = {
-  // Upsert + fetch the signed-in learner.
+  // Upsert + fetch the signed-in learner
   me: (input: { clerkId: string; name?: string; email?: string; avatar?: string }) =>
     request<Child>('/api/me', { method: 'POST', body: JSON.stringify(input) }),
 
@@ -95,7 +108,6 @@ export const api = {
       { method: 'POST', body: JSON.stringify(data) }
     ),
 
-  // Тоглоом, өдрийн сорил зэрэгт coin/exp олгох.
   reward: (clerkId: string, data: { coins?: number; exp?: number }) =>
     request<{ child: Child; earnedCoins: number; earnedExp: number }>(
       `/api/me/${clerkId}/reward`,

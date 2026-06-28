@@ -10,9 +10,14 @@ export const DEFAULT_BADGES = [
 
 export const childInclude = { badges: { orderBy: { id: 'asc' as const } } };
 
-// Туршлагын оноо (exp) → түвшин. Түвшин бүрд 100 exp хэрэгтэй.
-export const EXP_PER_LEVEL = 100;
-export const levelForExp = (exp: number) => Math.floor((exp || 0) / EXP_PER_LEVEL) + 1;
+// Түвшин ахих тусам дараагийн түвшинд илүү их exp шаардана.
+// N түвшинд хүрэх нийт exp = 50·N·(N-1) → 0, 100, 300, 600, 1000, 1500…
+export const expToReach = (level: number) => 50 * level * (level - 1);
+export const levelForExp = (exp: number) => {
+  let level = 1;
+  while ((exp || 0) >= expToReach(level + 1)) level++;
+  return level;
+};
 
 // Wrap a route handler so thrown errors become JSON 500s (like the Express `wrap`).
 export function handle<T extends unknown[]>(

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator } from '../../rn/primitives';
+import { View, Text, StyleSheet, Pressable, ScrollView } from '../../rn/primitives';
 import { LinearGradient } from '../../rn/LinearGradient';
 import StatusBarRow from '../../components/StatusBarRow';
 import AppIcon from '../../components/AppIcon';
@@ -31,7 +31,7 @@ const REWARD = { coins: 10, exp: 15 };
 function scramble(word: string): Tile[] {
   const chars = [...word];
   let order = chars.map((c, i) => ({ id: i, char: c, used: false }));
-  // Эх үгтэй адил болохгүй болтол холино.
+  
   for (let attempt = 0; attempt < 20; attempt++) {
     order = [...order].sort(() => Math.random() - 0.5);
     if (order.map((t) => t.char).join('') !== word) break;
@@ -44,10 +44,9 @@ export default function WordBuildScreen() {
   const { child, refresh } = useChild();
 
   const [words, setWords] = useState<WordItem[]>(FALLBACK_WORDS);
-  const [wordsLoaded, setWordsLoaded] = useState(false);
   const [idx, setIdx] = useState(0);
   const [tiles, setTiles] = useState<Tile[]>([]);
-  const [slots, setSlots] = useState<number[]>([]); // байрлуулсан tile id-ууд
+  const [slots, setSlots] = useState<number[]>([]); 
   const [status, setStatus] = useState<'playing' | 'correct' | 'wrong'>('playing');
   const [solved, setSolved] = useState(0);
   const [ttsBusy, setTtsBusy] = useState(false);
@@ -56,8 +55,8 @@ export default function WordBuildScreen() {
   const awardedRef = useRef(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fetchedRef = useRef(false);
+  const startedRef = useRef(false);
 
-  // Тоглоомын үгсийг AI-аар (дислекси түвшинд тааруулж) нэг удаа татна.
   useEffect(() => {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
@@ -72,21 +71,18 @@ export default function WordBuildScreen() {
     })
       .then((r) => r.json())
       .then((d) => {
-        if (active && Array.isArray(d.words) && d.words.length >= 4) setWords(d.words);
-      })
-      .catch(() => {})
-      .finally(() => {
-        if (active) {
+        if (active && Array.isArray(d.words) && d.words.length >= 4 && !startedRef.current) {
+          setWords(d.words);
           setIdx(0);
-          setWordsLoaded(true);
         }
-      });
+      })
+      .catch(() => {});
     return () => {
       active = false;
     };
   }, [child?.dyslexiaWeakSkills, child?.dyslexiaRisk]);
 
-  // Chimege-ээр угсрах үгийг чанга хэлнэ.
+  
   const speakWord = useCallback(async (text: string) => {
     setTtsBusy(true);
     try {
@@ -108,7 +104,7 @@ export default function WordBuildScreen() {
       audio.onerror = () => setTtsBusy(false);
       await audio.play();
     } catch {
-      setTtsBusy(false); // autoplay хориглосон бол «Сонсох»-оор сонсоно
+      setTtsBusy(false); 
     }
   }, []);
 
@@ -126,15 +122,14 @@ export default function WordBuildScreen() {
     setup(idx);
   }, [idx, setup]);
 
-  // Шинэ үг гарах бүрд (үгс ачаалагдсаны дараа) автоматаар чанга хэлнэ.
+  // Шинэ үг гарах бүрд автоматаар чанга хэлнэ. 
   useEffect(() => {
-    if (!wordsLoaded) return;
     speakWord(words[idx].word);
-  }, [idx, words, wordsLoaded, speakWord]);
+  }, [idx, words, speakWord]);
 
   const built = slots.map((id) => tiles.find((t) => t.id === id)?.char ?? '').join('');
 
-  // Үсэг бүрэн орсон үед шалгана.
+ 
   useEffect(() => {
     if (status !== 'playing' || slots.length === 0) return;
     if (slots.length !== current.word.length) return;
@@ -154,6 +149,7 @@ export default function WordBuildScreen() {
 
   const tapTile = (tile: Tile) => {
     if (status === 'correct' || tile.used) return;
+    startedRef.current = true;
     setTiles((prev) => prev.map((t) => (t.id === tile.id ? { ...t, used: true } : t)));
     setSlots((prev) => [...prev, tile.id]);
     if (status === 'wrong') setStatus('playing');
@@ -177,25 +173,6 @@ export default function WordBuildScreen() {
   const next = () => setIdx((p) => (p + 1) % words.length);
 
   const slotChars = [...current.word].map((_, i) => (slots[i] !== undefined ? tiles.find((t) => t.id === slots[i])?.char ?? '' : ''));
-
-  if (!wordsLoaded) {
-    return (
-      <View style={styles.root}>
-        <StatusBarRow />
-        <View style={styles.header}>
-          <Pressable style={styles.iconBtn} onPress={() => router.back()}>
-            <AppIcon name="arrowBack" size={20} color={colors.warm.text} />
-          </Pressable>
-          <Text style={styles.headerTitle}>Үсгийг зөв байрлуулах</Text>
-          <View style={{ width: 40 }} />
-        </View>
-        <View style={styles.loading}>
-          <ActivityIndicator color={colors.peach.dark} size={32} />
-          <Text style={styles.loadingText}>Үг бэлдэж байна…</Text>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.root}>
@@ -316,8 +293,6 @@ const styles = StyleSheet.create({
     ...shadows.card,
   },
   scoreText: { fontFamily: fonts.fredoka.bold, fontSize: 15, color: colors.warm.text },
-  loading: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
-  loadingText: { fontFamily: fonts.lexend.regular, fontSize: 14, color: colors.warm.gray },
   content: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 40, gap: 20 },
   hint: { borderRadius: 24, paddingVertical: 28, alignItems: 'center', gap: 8, ...shadows.peach },
   hintEmoji: { fontSize: 72 },

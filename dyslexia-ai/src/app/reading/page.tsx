@@ -18,8 +18,8 @@ export default function ReadingScreen() {
   const router = useRouter();
   const { child, loading, refresh } = useChild();
 
-  const [task, setTask] = useState<Task | null>(null);
-  const [loadingTask, setLoadingTask] = useState(true);
+  const [task, setTask] = useState<Task | null>({ text: 'Бяцхан зулзага наранд тоглож байна.', generated: false });
+  const [loadingTask, setLoadingTask] = useState(false);
   const [ttsBusy, setTtsBusy] = useState(false);
   const [recording, setRecording] = useState(false);
   const [sttBusy, setSttBusy] = useState(false);
@@ -29,11 +29,14 @@ export default function ReadingScreen() {
 
   const recorderRef = useRef<MicRecorder | null>(null);
   const startedRef = useRef(false);
+  const readingStartedRef = useRef(false);
 
-  const loadTask = useCallback(async () => {
-    setLoadingTask(true);
-    setResult(null);
-    setErr(null);
+  const loadTask = useCallback(async (background = false) => {
+    if (!background) {
+      setLoadingTask(true);
+      setResult(null);
+      setErr(null);
+    }
     try {
       const res = await fetch('/api/reading-task', {
         method: 'POST',
@@ -44,21 +47,22 @@ export default function ReadingScreen() {
         }),
       });
       const data = await res.json();
+      if (background && readingStartedRef.current) return;
       setTask({ text: data.text, generated: !!data.generated });
     } catch {
-      setErr('Даалгавар үүсгэхэд алдаа гарлаа');
-      setTask({ text: 'Бяцхан зулзага наранд тоглож байна.', generated: false });
+      if (!background) {
+        setErr('Даалгавар үүсгэхэд алдаа гарлаа');
+        setTask({ text: 'Бяцхан зулзага наранд тоглож байна.', generated: false });
+      }
     } finally {
-      setLoadingTask(false);
+      if (!background) setLoadingTask(false);
     }
   }, [child?.dyslexiaWeakSkills, child?.dyslexiaRisk]);
 
-  // Эхний даалгаврыг child дата бэлэн болсны дараа НЭГ удаа ачаална.
-  // (Дараа нь зөвхөн «Дараах» товчоор шинэ даалгавар авна — өөрөө сольдоггүй.)
   useEffect(() => {
     if (loading || startedRef.current) return;
     startedRef.current = true;
-    loadTask();
+    loadTask(true);
   }, [loading, loadTask]);
 
   // "Сонсох" — Chimege TTS уншуулна.
@@ -135,6 +139,7 @@ export default function ReadingScreen() {
       await rec.start();
       recorderRef.current = rec;
       setRecording(true);
+      readingStartedRef.current = true;
     } catch {
       setErr('Микрофон нээх боломжгүй байна');
     }
@@ -152,7 +157,7 @@ export default function ReadingScreen() {
           <AppIcon name="arrowBack" size={20} color={colors.warm.text} />
         </Pressable>
         <Text style={styles.headerTitle}>Унших хичээл</Text>
-        <Pressable style={[styles.iconBtn, { backgroundColor: colors.lavender.light }]} onPress={loadTask}>
+        <Pressable style={[styles.iconBtn, { backgroundColor: colors.lavender.light }]} onPress={() => loadTask()}>
           <AppIcon name="repeat" size={18} color={colors.lavender.dark} />
         </Pressable>
       </View>
@@ -259,7 +264,7 @@ export default function ReadingScreen() {
         {/* Дараагийн даалгавар руу зөвхөн дарахад шилжинэ */}
         <Pressable
           style={[styles.nextBtn, (loadingTask || recording || sttBusy) && { opacity: 0.5 }]}
-          onPress={loadTask}
+          onPress={() => loadTask()}
           disabled={loadingTask || recording || sttBusy}
         >
           <Text style={styles.nextBtnText}>Дараах даалгавар →</Text>

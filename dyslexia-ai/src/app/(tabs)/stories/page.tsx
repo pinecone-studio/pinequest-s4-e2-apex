@@ -41,7 +41,7 @@ export default function StoriesScreen() {
           </View>
           <View style={styles.featuredRow}>
             <View style={styles.featuredCover}>
-              <Text style={{ fontSize: 48 }}>🐰</Text>
+              <Text style={{ fontSize: 160 }}>🐰</Text>
             </View>
             <View style={{ flex: 1 }}>
               <View style={styles.badge}>
@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
   deco: { position: 'absolute', fontSize: 18, opacity: 0.7 },
   featuredRow: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   featuredCover: {
-    width: 80,
-    height: 80,
-    borderRadius: 16,
+    width: 170,
+    height: 170,
+    borderRadius: 24,
     backgroundColor: colors.warm.card,
     alignItems: 'center',
     justifyContent: 'center',
