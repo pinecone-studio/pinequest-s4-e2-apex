@@ -9,6 +9,7 @@ import { colors, fonts, shadows } from '../../../theme';
 import { useChild } from '../../../hooks/useChild';
 import { expProgress, levelBadge } from '../../../lib/api';
 import LevelBadge from '../../../components/LevelBadge';
+import ProverbCard from '../../../components/ProverbCard';
 
 const PATHS: Record<string, string> = {
   Reading: '/reading',
@@ -86,7 +87,8 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* AI Buddy banner — түр хугацаанд нуусан */}
+        {/* Өдрийн зүйр цэцэн үг */}
+        <ProverbCard />
 
         {/* Quick access — мөр бүрд нэг карт */}
         <View style={styles.grid}>

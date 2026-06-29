@@ -70,7 +70,7 @@ export default function GamesScreen({ navigation }: { navigation: any }) {
       <StatusBarRow />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Сургалтын тоглоом</Text>
-        <Text style={styles.subtitle}>Тоглоод шагнал ав!</Text>
+        <Text style={styles.subtitle}>Тоглоод сайжир</Text>
 
         {/* Stats */}
         <View style={styles.statsRow}>

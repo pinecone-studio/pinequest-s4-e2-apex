@@ -49,30 +49,8 @@ export type Child = {
 };
 
 export type DyslexiaRisk = 'low' | 'medium' | 'high';
-
-// Туршлагын оноо (exp) → түвшин ба прогресс. Server-тэй ижил логик (50·N·(N-1)).
-export const expToReach = (level: number) => 50 * level * (level - 1);
-export function expProgress(exp: number) {
-  const safe = Math.max(0, exp || 0);
-  let level = 1;
-  while (safe >= expToReach(level + 1)) level++;
-  const base = expToReach(level);
-  return {
-    level,
-    current: safe - base,
-    needed: expToReach(level + 1) - base,
-  };
-}
-
-// Түвшингээс шууд тооцох tier badge — DB-д хадгалах шаардлагагүй
-const TIERS = [
-  { min: 20, name: 'Алмаз', color: '#5AA9E6', glyph: '💎' },
-  { min: 15, name: 'Алт', color: '#E6B84F', glyph: '🥇' },
-  { min: 10, name: 'Мөнгө', color: '#9AA7B4', glyph: '🥈' },
-  { min: 5, name: 'Хүрэл', color: '#C08457', glyph: '🥉' },
-  { min: 1, name: 'Шинэхэн', color: '#8FB487', glyph: '🌱' },
-];
-export const levelBadge = (level: number) => TIERS.find((t) => level >= t.min) ?? TIERS[TIERS.length - 1];
+// Түвшин/exp/badge логик lib/level.ts-д. Эндээс дамжуулан re-export.
+export { expToReach, expProgress, levelBadge } from './level';
 
 // Тест дуусахад илгээх даалгавар бүрийн хариу.
 export type DyslexiaAnswer = { type: string; correct: boolean };

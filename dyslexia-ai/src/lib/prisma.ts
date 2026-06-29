@@ -1,8 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-// Single shared Prisma client. In dev, Next.js hot-reload would otherwise create
-// a new client on every change and exhaust the DB connection pool, so we stash it
-// on globalThis.
+
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 export const prisma =
