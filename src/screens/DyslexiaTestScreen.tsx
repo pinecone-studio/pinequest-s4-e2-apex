@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,69 +6,69 @@ import {
   StyleSheet,
   ScrollView,
   Animated,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { colors, fonts, shadows } from '../theme';
-import { useChild } from '../hooks/useChild';
-import { api, DyslexiaRisk } from '../lib/api';
-import { SKILL_AREAS, SkillArea } from '../lib/dyslexia';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { colors, fonts, shadows } from "../theme";
+import { useChild } from "../hooks/useChild";
+import { api, DyslexiaRisk } from "../lib/api";
+import { SKILL_AREAS, SkillArea } from "../lib/dyslexia";
 
 type TaskAnswer = boolean | null;
 
 const TASKS = [
   {
     id: 1,
-    type: 'sound-matching',
+    type: "sound-matching",
     instruction: "Аль нь 'Б' авиагаар эхэлж байна вэ?",
     options: [
-      { emoji: '🍎', label: 'Алим', correct: false },
-      { emoji: '🎈', label: 'Бөмбөг', correct: true },
-      { emoji: '🚗', label: 'Машин', correct: false },
+      { emoji: "🍎", label: "Алим", correct: false },
+      { emoji: "🎈", label: "Бөмбөг", correct: true },
+      { emoji: "🚗", label: "Машин", correct: false },
     ],
   },
   {
     id: 2,
-    type: 'syllable-counting',
-    instruction: 'ТЭМЭЭ гэдэг үгийг үеэр тас — хэдэн үе байна вэ?',
-    word: 'ТЭМЭЭ',
+    type: "syllable-counting",
+    instruction: "ТЭМЭЭ гэдэг үгийг үеэр тас — хэдэн үе байна вэ?",
+    word: "ТЭМЭЭ",
     options: [
-      { label: '1', correct: false },
-      { label: '2', correct: true },
-      { label: '3', correct: false },
+      { label: "1", correct: false },
+      { label: "2", correct: true },
+      { label: "3", correct: false },
     ],
   },
   {
     id: 3,
-    type: 'sound-blending',
-    instruction: 'М … А … Т … А … Р — ямар үг вэ?',
+    type: "sound-blending",
+    instruction: "М … А … Т … А … Р — ямар үг вэ?",
     options: [
-      { label: 'МАТАР', correct: true },
-      { label: 'МОРЬ', correct: false },
-      { label: 'НОХОЙ', correct: false },
+      { label: "МАТАР", correct: true },
+      { label: "МОРЬ", correct: false },
+      { label: "НОХОЙ", correct: false },
     ],
   },
   {
     id: 4,
-    type: 'sentence-repetition',
-    instruction: 'Бага хүү бариулыг барив — дагаад хэлээрэй.',
+    type: "sentence-repetition",
+    instruction: "Бага хүү бариулыг барив — дагаад хэлээрэй.",
     parentJudge: true,
   },
   {
     id: 5,
-    type: 'mirror-discrimination',
-    instruction: 'Ганцаараа өөр зүг рүү сэлж байгаа загасыг дараарай.',
-    fishExample: '→',
+    type: "mirror-discrimination",
+    instruction: "Ганцаараа өөр зүг рүү сэлж байгаа загасыг дараарай.",
+    fishExample: "→",
     options: [
-      { fish: '→', correct: false },
-      { fish: '←', correct: true },
-      { fish: '→', correct: false },
+      { fish: "→", correct: false },
+      { fish: "←", correct: true },
+      { fish: "→", correct: false },
     ],
   },
   {
     id: 6,
-    type: 'orientation',
-    instruction: 'Баруун гараа өргөөрэй. Зүүн чихээ бариарай.',
+    type: "orientation",
+    instruction: "Баруун гараа өргөөрэй. Зүүн чихээ бариарай.",
     parentJudge: true,
   },
 ];
@@ -115,16 +115,13 @@ export default function DyslexiaTestScreen() {
 
   const wrongCount = answers.filter((a) => a === false).length;
   const score = 6 - wrongCount;
-  const risk: DyslexiaRisk = wrongCount <= 1 ? 'low' : wrongCount <= 3 ? 'medium' : 'high';
+  const risk: DyslexiaRisk =
+    wrongCount <= 1 ? "low" : wrongCount <= 3 ? "medium" : "high";
 
-  // Буруу хариулсан даалгаврууд → сул ур чадварын төрлүүд. Үр дүнгийн зөвлөмж
-  // болон цаашдын хичээлийг хүүхэд бүрд тааруулахад ашиглана.
   const weakAreas = TASKS.filter((t, i) => answers[i] === false).map(
-    (t) => t.type as SkillArea
+    (t) => t.type as SkillArea,
   );
 
-  // When the test finishes, persist the result to the backend (and mark the
-  // onboarding test as done so the learner isn't asked again next time).
   useEffect(() => {
     if (!showResult || saved || !child?.clerkId) return;
     setSaved(true);
@@ -133,29 +130,35 @@ export default function DyslexiaTestScreen() {
       correct: answers[i] === true,
     }));
     api
-      .saveDyslexiaResult(child.clerkId, { score, risk, answers: answerPayload })
+      .saveDyslexiaResult(child.clerkId, {
+        score,
+        risk,
+        answers: answerPayload,
+      })
       .then(() => refresh())
-      .catch((e) => console.warn('Дислекси үр дүн хадгалахад алдаа:', e));
+      .catch((e) => console.warn("Дислекси үр дүн хадгалахад алдаа:", e));
   }, [showResult, saved, child, score, risk, refresh]);
 
   const resultColor =
-    wrongCount <= 1 ? colors.sage.DEFAULT : wrongCount <= 3 ? colors.sand.DEFAULT : colors.peach.DEFAULT;
+    wrongCount <= 1
+      ? colors.sage.DEFAULT
+      : wrongCount <= 3
+        ? colors.sand.DEFAULT
+        : colors.peach.DEFAULT;
   const resultText =
     wrongCount <= 1
-      ? 'Маш сайн! Хүүхэд хэвийн хөгжиж байна.'
+      ? "Маш сайн! Хүүхэд хэвийн хөгжиж байна."
       : wrongCount <= 3
-      ? 'Зарим дасгал хэрэгтэй байж болзошгүй. Өдөр бүр авиан тоглоом тоглоорой.'
-      : 'Дислексийн эрт илрүүлгийн шинж тэмдэг ажиглагдаж байна. Мэргэжилтэнтэй зөвлөлдөхийг зөвлөж байна.';
+        ? "Зарим дасгал хэрэгтэй байж болзошгүй. Өдөр бүр авиан тоглоом тоглоорой."
+        : "Дислексийн эрт илрүүлгийн шинж тэмдэг ажиглагдаж байна. Мэргэжилтэнтэй зөвлөлдөхийг зөвлөж байна.";
 
   if (showResult) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={["top"]}>
         <ScrollView contentContainerStyle={styles.resultContainer}>
           <View style={[styles.resultCard, { backgroundColor: resultColor }]}>
             <Text style={styles.resultTitle}>Шалгалт дууссан</Text>
-            <Text style={styles.resultScore}>
-              {6 - wrongCount}/6 зөв
-            </Text>
+            <Text style={styles.resultScore}>{6 - wrongCount}/6 зөв</Text>
           </View>
 
           <View style={styles.feedbackCard}>
@@ -181,17 +184,27 @@ export default function DyslexiaTestScreen() {
           ) : (
             <View style={styles.tipsCard}>
               <Text style={styles.tipsTitle}>Эцэг эхийн зөвлөмж:</Text>
-              <Text style={styles.tipItem}>• Өдөр бүр шүлэг, хэл зүгшрүүлэх үг дасгалла</Text>
-              <Text style={styles.tipItem}>• Дуут үлгэр сонсго, дагуулж хэлүүл</Text>
-              <Text style={styles.tipItem}>• Үсэг, авиатай тоглоом тоглоорой</Text>
+              <Text style={styles.tipItem}>
+                • Өдөр бүр шүлэг, хэл зүгшрүүлэх үг дасгалла
+              </Text>
+              <Text style={styles.tipItem}>
+                • Дуут үлгэр сонсго, дагуулж хэлүүл
+              </Text>
+              <Text style={styles.tipItem}>
+                • Үсэг, авиатай тоглоом тоглоорой
+              </Text>
             </View>
           )}
 
           <TouchableOpacity
             style={styles.doneButton}
-            onPress={() => (onboarding ? navigation.replace('Main') : navigation.goBack())}
+            onPress={() =>
+              onboarding ? navigation.replace("Main") : navigation.goBack()
+            }
           >
-            <Text style={styles.doneButtonText}>{onboarding ? 'Эхлэх' : 'Дуусгах'}</Text>
+            <Text style={styles.doneButtonText}>
+              {onboarding ? "Эхлэх" : "Дуусгах"}
+            </Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
@@ -199,7 +212,7 @@ export default function DyslexiaTestScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={["top"]}>
       <View style={styles.header}>
         {onboarding ? (
           <View style={{ width: 32 }} />
@@ -235,9 +248,9 @@ export default function DyslexiaTestScreen() {
           </Text>
         </View>
 
-        {task.type === 'sound-matching' && (
+        {task.type === "sound-matching" && task.options && (
           <View style={styles.optionsGrid}>
-            {task.options?.map((option, idx) => (
+            {task.options.map((option: any, idx) => (
               <TouchableOpacity
                 key={idx}
                 style={styles.emojiButton}
@@ -250,11 +263,11 @@ export default function DyslexiaTestScreen() {
           </View>
         )}
 
-        {task.type === 'syllable-counting' && (
+        {task.type === "syllable-counting" && task.options && (
           <View style={styles.centerContent}>
-            <Text style={styles.largeWord}>{task.word}</Text>
+            <Text style={styles.largeWord}>{(task as any).word}</Text>
             <View style={styles.numberRow}>
-              {task.options?.map((option, idx) => (
+              {task.options.map((option: any, idx) => (
                 <TouchableOpacity
                   key={idx}
                   style={styles.numberButton}
@@ -267,9 +280,9 @@ export default function DyslexiaTestScreen() {
           </View>
         )}
 
-        {task.type === 'sound-blending' && (
+        {task.type === "sound-blending" && task.options && (
           <View style={styles.optionsColumn}>
-            {task.options?.map((option, idx) => (
+            {task.options.map((option: any, idx) => (
               <TouchableOpacity
                 key={idx}
                 style={styles.wordButton}
@@ -281,7 +294,7 @@ export default function DyslexiaTestScreen() {
           </View>
         )}
 
-        {task.type === 'sentence-repetition' && (
+        {task.type === "sentence-repetition" && (
           <View style={styles.judgeContainer}>
             <TouchableOpacity
               style={[styles.judgeButton, styles.judgeCorrect]}
@@ -300,20 +313,25 @@ export default function DyslexiaTestScreen() {
           </View>
         )}
 
-        {task.type === 'mirror-discrimination' && (
+        {task.type === "mirror-discrimination" && task.options && (
           <View style={styles.centerContent}>
             <View style={styles.exampleBox}>
               <Text style={styles.exampleLabel}>Жишээ:</Text>
               <Text style={styles.fishLarge}>🐟</Text>
             </View>
             <View style={styles.fishGrid}>
-              {task.options?.map((option, idx) => (
+              {task.options.map((option: any, idx) => (
                 <TouchableOpacity
                   key={idx}
                   style={styles.fishButton}
                   onPress={() => handleAnswer(option.correct)}
                 >
-                  <Text style={[styles.fishIcon, option.fish === '←' && styles.fishFlipped]}>
+                  <Text
+                    style={[
+                      styles.fishIcon,
+                      option.fish === "←" && styles.fishFlipped,
+                    ]}
+                  >
                     🐟
                   </Text>
                 </TouchableOpacity>
@@ -322,7 +340,7 @@ export default function DyslexiaTestScreen() {
           </View>
         )}
 
-        {task.type === 'orientation' && (
+        {task.type === "orientation" && (
           <View style={styles.judgeContainer}>
             <TouchableOpacity
               style={[styles.judgeButton, styles.judgeCorrect]}
@@ -351,8 +369,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.warm.beige,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 16,
     gap: 12,
@@ -369,10 +387,10 @@ const styles = StyleSheet.create({
     height: 8,
     backgroundColor: colors.warm.secondary,
     borderRadius: 4,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     backgroundColor: colors.lavender.mid,
     borderRadius: 4,
   },
@@ -380,7 +398,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: fonts.lexend.medium,
     color: colors.warm.gray,
-    textAlign: 'center',
+    textAlign: "center",
   },
   speakerButton: {
     fontSize: 28,
@@ -402,16 +420,16 @@ const styles = StyleSheet.create({
     borderColor: colors.lavender.light,
   },
   instructionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   instructionLabel: {
     fontSize: 14,
     fontFamily: fonts.lexend.semibold,
     color: colors.lavender.dark,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
   playingIndicator: {
     fontSize: 11,
@@ -429,22 +447,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.lexend.regular,
     color: colors.warm.gray,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   optionsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    flexWrap: "wrap",
     gap: 16,
   },
   emojiButton: {
     backgroundColor: colors.warm.card,
     borderRadius: 20,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
     minWidth: 100,
     minHeight: 120,
-    justifyContent: 'center',
+    justifyContent: "center",
     ...shadows.card,
   },
   emoji: {
@@ -457,7 +475,7 @@ const styles = StyleSheet.create({
     color: colors.warm.text,
   },
   centerContent: {
-    alignItems: 'center',
+    alignItems: "center",
     gap: 32,
   },
   largeWord: {
@@ -466,7 +484,7 @@ const styles = StyleSheet.create({
     color: colors.lavender.dark,
   },
   numberRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 20,
   },
   numberButton: {
@@ -474,8 +492,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 80,
     height: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     ...shadows.card,
   },
   numberText: {
@@ -490,7 +508,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.warm.card,
     borderRadius: 16,
     paddingVertical: 24,
-    alignItems: 'center',
+    alignItems: "center",
     ...shadows.card,
   },
   wordButtonText: {
@@ -505,9 +523,9 @@ const styles = StyleSheet.create({
   judgeButton: {
     borderRadius: 20,
     paddingVertical: 32,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
     gap: 16,
     ...shadows.card,
   },
@@ -529,7 +547,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lavender.lightest,
     borderRadius: 16,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
     ...shadows.cardSm,
   },
   exampleLabel: {
@@ -542,17 +560,17 @@ const styles = StyleSheet.create({
     fontSize: 64,
   },
   fishGrid: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 16,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   fishButton: {
     backgroundColor: colors.warm.card,
     borderRadius: 20,
     width: 100,
     height: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     ...shadows.card,
   },
   fishIcon: {
@@ -568,7 +586,7 @@ const styles = StyleSheet.create({
   resultCard: {
     borderRadius: 24,
     padding: 32,
-    alignItems: 'center',
+    alignItems: "center",
     ...shadows.card,
   },
   resultTitle: {
@@ -593,7 +611,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.lexend.medium,
     color: colors.warm.text,
     lineHeight: 28,
-    textAlign: 'center',
+    textAlign: "center",
   },
   tipsCard: {
     backgroundColor: colors.lavender.lightest,
@@ -627,7 +645,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lavender.mid,
     borderRadius: 16,
     paddingVertical: 20,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 12,
     ...shadows.lavender,
   },
