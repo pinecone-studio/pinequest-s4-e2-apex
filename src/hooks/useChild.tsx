@@ -2,8 +2,6 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import { useUser } from '@clerk/clerk-expo';
 import { api, Child } from '../lib/api';
 
-// Loads (and upserts) the learner profile for the signed-in Clerk user and
-// shares it across screens. Wrap the signed-in app in <ChildProvider>.
 type ChildContextValue = {
   child: Child | null;
   loading: boolean;

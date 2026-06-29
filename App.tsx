@@ -44,6 +44,8 @@ import SoundDetectiveScreen from './src/screens/SoundDetectiveScreen';
 import TextScanScreen from './src/screens/TextScanScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
+import AlphabetScreen from './src/screens/AlphabetScreen';
+import TraceLetterScreen from './src/screens/TraceLetterScreen';
 
 const Stack = createStackNavigator();
 const AuthStackNav = createStackNavigator();
@@ -80,6 +82,8 @@ function AppStack() {
       <Stack.Screen name="LetterMatch" component={LetterMatchScreen} />
       <Stack.Screen name="SoundDetective" component={SoundDetectiveScreen} />
       <Stack.Screen name="TextScan" component={TextScanScreen} />
+      <Stack.Screen name="Alphabet" component={AlphabetScreen} />
+      <Stack.Screen name="TraceLetter" component={TraceLetterScreen} />
     </Stack.Navigator>
   );
 }
