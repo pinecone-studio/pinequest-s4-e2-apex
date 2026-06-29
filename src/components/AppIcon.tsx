@@ -31,6 +31,10 @@ const MAP = {
   voice: { lib: 'mci', name: 'account-voice' },
   person: { lib: 'ion', name: 'person' },
   logout: { lib: 'ion', name: 'log-out-outline' },
+  camera: { lib: 'ion', name: 'camera' },
+  images: { lib: 'ion', name: 'images' },
+  close: { lib: 'ion', name: 'close' },
+  scan: { lib: 'mci', name: 'text-recognition' },
 } as const;
 
 export type AppIconName = keyof typeof MAP;

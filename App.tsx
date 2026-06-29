@@ -41,6 +41,7 @@ import WordBuildScreen from './src/screens/WordBuildScreen';
 import DailyScreen from './src/screens/DailyScreen';
 import LetterMatchScreen from './src/screens/LetterMatchScreen';
 import SoundDetectiveScreen from './src/screens/SoundDetectiveScreen';
+import TextScanScreen from './src/screens/TextScanScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 
@@ -78,6 +79,7 @@ function AppStack() {
       <Stack.Screen name="Daily" component={DailyScreen} />
       <Stack.Screen name="LetterMatch" component={LetterMatchScreen} />
       <Stack.Screen name="SoundDetective" component={SoundDetectiveScreen} />
+      <Stack.Screen name="TextScan" component={TextScanScreen} />
     </Stack.Navigator>
   );
 }

@@ -22,6 +22,9 @@ import {
   IoPerson,
   IoLogOutOutline,
   IoCash,
+  IoCamera,
+  IoImages,
+  IoClose,
 } from 'react-icons/io5';
 import {
   FaBrain,
@@ -31,7 +34,7 @@ import {
   FaEarListen,
 } from 'react-icons/fa6';
 import { GiPartyPopper } from 'react-icons/gi';
-import { MdRecordVoiceOver } from 'react-icons/md';
+import { MdRecordVoiceOver, MdDocumentScanner } from 'react-icons/md';
 
 // Аппд ашиглагдах семантик нэрсийг react-icons дүрс рүү буулгана
 // (Expo build-ийн @expo/vector-icons map-тай дүйцүүлсэн).
@@ -63,6 +66,10 @@ const MAP = {
   voice: MdRecordVoiceOver,
   person: IoPerson,
   logout: IoLogOutOutline,
+  camera: IoCamera,
+  images: IoImages,
+  close: IoClose,
+  scan: MdDocumentScanner,
 } satisfies Record<string, IconType>;
 
 export type AppIconName = keyof typeof MAP;

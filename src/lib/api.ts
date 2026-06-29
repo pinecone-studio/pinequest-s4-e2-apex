@@ -138,4 +138,10 @@ export const api = {
   lessons: () => request<Lesson[]>('/api/lessons'),
   stories: () => request<Story[]>('/api/stories'),
   games: () => request<Game[]>('/api/games'),
+
+  scanText: (imageBase64: string, mimeType = 'image/jpeg') =>
+    request<{ original: string; simplified: string }>('/api/scan-text', {
+      method: 'POST',
+      body: JSON.stringify({ imageBase64, mimeType }),
+    }),
 };
