@@ -3,8 +3,6 @@ import { NextResponse } from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// Chimege TTS — текстийг Монгол хоолойгоор уншуулж, аудио (WAV) буцаана.
-// Токеныг сервер тал дээр л барьж, клиентэд задлахгүй.
 export async function POST(req: Request) {
   const { text } = (await req.json().catch(() => ({}))) as { text?: string };
   if (!text) return NextResponse.json({ error: 'text required' }, { status: 400 });
@@ -17,7 +15,7 @@ export async function POST(req: Request) {
     headers: {
       'Content-Type': 'plain/text',
       token,
-      'voice-id': '1', // эмэгтэй хоолой
+      'voice-id': '1',
     },
     body: text,
   });

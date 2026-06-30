@@ -24,8 +24,8 @@ const cards: { to: string; bg: string; icon: AppIconName; color: string; title: 
   { to: 'Reading', bg: colors.sand.lightest, icon: 'book', color: '#A8895F', title: 'Унших хичээл', sub: 'AI-аар тохируулсан дасгал' },
   { to: 'Games', bg: colors.peach.lightest, icon: 'game', color: colors.peach.dark, title: 'Сургалтын тоглоом', sub: '4 хөгжилтэй тоглоом' },
   { to: 'Stories', bg: colors.slate.light, icon: 'library', color: colors.slate.dark, title: 'Үлгэрийн ертөнц', sub: '12 үлгэр' },
-  { to: 'DyslexiaTest', bg: colors.lavender.lightest, icon: 'brain', color: colors.lavender.dark, title: 'Дислекси шалгалт', sub: '5 мин · 4-7 нас' },
   { to: 'TextScan', bg: colors.sage.light, icon: 'scan', color: colors.sage.dark, title: 'Текст уншуулах', sub: 'AI-аар зургаас текст хялбарчлах' },
+  { to: 'DyslexiaTest', bg: colors.lavender.lightest, icon: 'brain', color: colors.lavender.dark, title: 'Дислекси шалгалт', sub: '5 мин · 4-7 нас' },
 ];
 
 const STAT_ICONS: { icon: AppIconName; color: string }[] = [

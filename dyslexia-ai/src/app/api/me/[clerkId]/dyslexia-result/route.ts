@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../../../lib/prisma';
-import { childInclude, handle } from '../../../../../lib/server';
+import { childInclude, handle, requireSelf } from '../../../../../lib/server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -8,17 +8,15 @@ export const dynamic = 'force-dynamic';
 type Ctx = { params: Promise<{ clerkId: string }> };
 type Answer = { type?: string; correct?: boolean };
 
-// Save the Lexi-AI dyslexia screening result and mark onboarding test as done.
 export const POST = handle(async (req: Request, { params }: Ctx) => {
   const { clerkId } = await params;
+  await requireSelf(clerkId);
   const { score, risk, answers } = (await req.json().catch(() => ({}))) as {
     score?: number;
     risk?: string;
     answers?: Answer[];
   };
 
-  // answers: [{ type, correct }] — буруу хариулсан даалгаврын төрлүүдээс сул ур
-  // чадварын жагсаалт гаргана (давхардлыг хасч).
   const answerList = Array.isArray(answers) ? answers : [];
   const weakSkills = [
     ...new Set(

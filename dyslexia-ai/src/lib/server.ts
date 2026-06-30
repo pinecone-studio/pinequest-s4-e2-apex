@@ -1,6 +1,18 @@
 import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
-// The badge set every new learner starts with (locked until earned).
+export class HttpError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+  }
+}
+
+export async function requireSelf(clerkId: string): Promise<void> {
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) return;
+  const { userId } = await auth();
+  if (!userId || userId !== clerkId) throw new HttpError(403, 'forbidden');
+}
+
 export const DEFAULT_BADGES = [
   { key: 'first_word', label: 'Анхны үг', emoji: '🌟' },
   { key: 'streak_5', label: '5 өдрийн дараалал', emoji: '🔥' },
@@ -12,7 +24,6 @@ export const childInclude = { badges: { orderBy: { id: 'asc' as const } } };
 
 export { expToReach, levelForExp } from './level';
 
-// Wrap a route handler so thrown errors become JSON 500s (like the Express `wrap`).
 export function handle<T extends unknown[]>(
   fn: (...args: T) => Promise<Response>
 ): (...args: T) => Promise<Response> {
@@ -20,13 +31,12 @@ export function handle<T extends unknown[]>(
     try {
       return await fn(...args);
     } catch (err) {
+      if (err instanceof HttpError) return NextResponse.json({ error: err.message }, { status: err.status });
       console.error(err);
-      const message = err instanceof Error ? err.message : 'Internal error';
-      return NextResponse.json({ error: message }, { status: 500 });
+      return NextResponse.json({ error: 'Internal error' }, { status: 500 });
     }
   };
 }
 
-// Prisma needs the Node.js runtime; force-dynamic avoids any response caching.
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

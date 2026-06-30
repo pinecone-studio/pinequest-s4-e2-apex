@@ -13,7 +13,6 @@ const FALLBACK = [
 
 const pick = () => FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
 
-// Хүүхдэд зориулсан богино монгол зүйр цэцэн үг + утгын тайлбарыг AI-аар үүсгэнэ.
 export const POST = handle(async () => {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return NextResponse.json({ ...pick(), generated: false });

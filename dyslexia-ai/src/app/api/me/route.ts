@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../lib/prisma';
-import { DEFAULT_BADGES, childInclude, handle } from '../../../lib/server';
+import { DEFAULT_BADGES, childInclude, handle, requireSelf } from '../../../lib/server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// Upsert the current learner from the signed-in Clerk user. Creates the default
-// badge set the first time we see this user.
 export const POST = handle(async (req: Request) => {
   const { clerkId, name, email, avatar } = (await req.json().catch(() => ({}))) as {
     clerkId?: string;
@@ -15,6 +13,7 @@ export const POST = handle(async (req: Request) => {
     avatar?: string;
   };
   if (!clerkId) return NextResponse.json({ error: 'clerkId required' }, { status: 400 });
+  await requireSelf(clerkId);
 
   const existing = await prisma.child.findUnique({ where: { clerkId } });
   if (existing) {
