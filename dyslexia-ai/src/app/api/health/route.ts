@@ -4,7 +4,6 @@ import { prisma } from '../../../lib/prisma';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// Public health check — баталгаажуулна: API ажиллаж, DB-д холбогдож байгаа эсэх.
 export async function GET() {
   try {
     const [children, lessons, stories, games] = await Promise.all([

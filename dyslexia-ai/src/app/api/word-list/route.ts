@@ -17,7 +17,6 @@ const FALLBACK: WordItem[] = [
   { word: 'НОМ', emoji: '📖' },
 ];
 
-// Зурагт буулгахад хялбар, цэвэр кирилл үг сонгоно (3-7 үсэг).
 function clean(items: unknown): WordItem[] {
   if (!Array.isArray(items)) return [];
   const seen = new Set<string>();
@@ -25,7 +24,7 @@ function clean(items: unknown): WordItem[] {
   for (const it of items) {
     const word = String((it as WordItem)?.word ?? '').trim().toUpperCase();
     const emoji = String((it as WordItem)?.emoji ?? '').trim();
-    if (!/^[А-ЯӨҮЁ]{3,7}$/.test(word)) continue; // зөвхөн кирилл, 3-7 үсэг
+    if (!/^[А-ЯӨҮЁ]{3,7}$/.test(word)) continue;
     if (!emoji || seen.has(word)) continue;
     seen.add(word);
     out.push({ word, emoji });
@@ -33,7 +32,6 @@ function clean(items: unknown): WordItem[] {
   return out;
 }
 
-// Дислекси тестийн дүнд тулгуурлан тоглоомын үгсийг AI-аар үүсгэнэ.
 export const POST = handle(async (req: Request) => {
   const { risk } = (await req.json().catch(() => ({}))) as { weakSkills?: string[]; risk?: string };
 

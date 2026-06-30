@@ -5,7 +5,6 @@ import { normalizeWeakAreas } from '../../../lib/dyslexia';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// Дислекси тестийн дүнд тулгуурлан богино унших даалгавар (өгүүлбэр) үүсгэнэ.
 export const POST = handle(async (req: Request) => {
   const { weakSkills, risk } = (await req.json().catch(() => ({}))) as {
     weakSkills?: string[];
@@ -14,11 +13,9 @@ export const POST = handle(async (req: Request) => {
 
   const areas = normalizeWeakAreas(weakSkills);
 
-  // Эрсдэл өндөр байх тусам богино, энгийн үгтэй өгүүлбэр.
   const length =
     risk === 'high' ? '4-6 үг' : risk === 'medium' ? '6-8 үг' : '7-9 үг';
 
-  // Бодит, ойлгомжтой сэдэв өгснөөр өгүүлбэр утга учиртай гарна.
   const THEMES = [
     'муур', 'нохой', 'туулай', 'шувуу', 'загас', 'морь', 'хонь', 'баавгай',
     'нар', 'сар', 'од', 'үүл', 'бороо', 'цас', 'салхи',
@@ -85,7 +82,6 @@ export const POST = handle(async (req: Request) => {
 
   const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
   const raw = data.choices?.[0]?.message?.content?.trim() || fallback;
-  // Эхэн/төгсгөлийн хашилт, дугаарлалтыг цэвэрлэх.
   const text = raw.replace(/^["'“”\d.\-)\s]+/, '').replace(/["'“”\s]+$/, '').trim() || fallback;
 
   return NextResponse.json({ text, focus: areas, generated: true });
