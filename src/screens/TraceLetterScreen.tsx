@@ -1,11 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Svg, { Path, Circle, Line, Polygon, Text as SvgText } from 'react-native-svg';
-import { fonts } from '../theme';
-import { getLetterPath } from '../lib/letterPaths';
+import Slider from '@react-native-community/slider';
+import { fonts, colors, shadows } from '../theme';
+import { getCyrillicLetter, getStrokeCount } from '../lib/cyrillicLetterPaths';
+import { useSpeech } from '../hooks/useSpeech';
+import { useSpeechSpeed } from '../contexts/SpeechSpeedContext';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const CANVAS_SIZE = WINDOW_WIDTH - 40;
@@ -23,13 +26,42 @@ export default function TraceLetterScreen() {
   const route = useRoute();
   const { letter } = (route.params as any) || { letter: 'А' };
 
+  const [currentStroke, setCurrentStroke] = useState(0);
   const [userPath, setUserPath] = useState<string>('');
   const [isDrawing, setIsDrawing] = useState(false);
-  const [accuracy, setAccuracy] = useState(0);
+  const [strokeAccuracy, setStrokeAccuracy] = useState(0);
+  const [completedStrokes, setCompletedStrokes] = useState<number[]>([]);
   const pathRef = useRef<string>('');
 
-  const letterData = getLetterPath(letter);
+  const { speak, stop, isPlaying } = useSpeech();
+  const { speed, setSpeed, speedMultiplier } = useSpeechSpeed();
+
+  const letterData = getCyrillicLetter(letter);
   const romanization = ROMANIZATION_MAP[letter] || '?';
+  const totalStrokes = getStrokeCount(letter);
+
+  if (!letterData) {
+    // Letter not yet defined - show message
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>✕</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 40 }}>
+          <Text style={[styles.title, { textAlign: 'center' }]}>
+            ⚠️ Үсгийн хэлбэр хараахан нэмэгдээгүй
+          </Text>
+          <Text style={{ fontFamily: fonts.lexend.regular, fontSize: 16, color: '#999', textAlign: 'center', marginTop: 16 }}>
+            "{letter}" үсгийн зөв бичих арга (прописи) баталгаажуулалт хүлээж байна.
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const currentStrokeData = letterData.strokes[currentStroke];
 
   const handleGestureEvent = (event: any) => {
     const { x, y } = event.nativeEvent;
@@ -47,9 +79,9 @@ export default function TraceLetterScreen() {
 
     setUserPath(pathRef.current);
 
-    // Simple accuracy calculation (can be improved)
-    const accuracy = calculateAccuracy(pathRef.current, letterData.path);
-    setAccuracy(accuracy);
+    // Calculate accuracy for current stroke
+    const accuracy = calculateAccuracy(pathRef.current, currentStrokeData.path);
+    setStrokeAccuracy(accuracy);
   };
 
   const handleGestureEnd = () => {
@@ -65,25 +97,40 @@ export default function TraceLetterScreen() {
   };
 
   const handleCheck = () => {
-    if (accuracy >= 70) {
-      // Success! Navigate back or to next letter
-      navigation.goBack();
+    if (strokeAccuracy >= 70) {
+      // Mark current stroke as complete
+      setCompletedStrokes([...completedStrokes, currentStroke]);
+
+      // Move to next stroke or finish
+      if (currentStroke < totalStrokes - 1) {
+        setCurrentStroke(currentStroke + 1);
+        handleReset();
+      } else {
+        // All strokes complete! Success!
+        navigation.goBack();
+      }
     }
   };
 
   const handleReset = () => {
     setUserPath('');
     pathRef.current = '';
-    setAccuracy(0);
+    setStrokeAccuracy(0);
     setIsDrawing(false);
   };
 
-  const playSound = () => {
-    // TODO: Integrate Chimege TTS
-    console.log('Playing sound for:', letter);
+  const overallProgress = totalStrokes > 0 ? ((completedStrokes.length + strokeAccuracy / 100) / totalStrokes) * 100 : 0;
+
+  const playSound = async () => {
+    if (isPlaying) {
+      stop();
+    } else {
+      // Play letter pronunciation with current speed
+      await speak(letter, speedMultiplier);
+    }
   };
 
-  const isComplete = accuracy >= 70;
+  const isComplete = strokeAccuracy >= 70;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -94,22 +141,48 @@ export default function TraceLetterScreen() {
             <Text style={styles.closeButtonText}>✕</Text>
           </TouchableOpacity>
           <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { width: `${accuracy}%` }]} />
+            <View style={[styles.progressBar, { width: `${overallProgress}%` }]} />
           </View>
         </View>
 
         {/* Title */}
-        <Text style={styles.title}>Үсэг зур</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginTop: 24, marginBottom: 16 }}>
+          <Text style={styles.title}>Үсэг зур</Text>
+          {totalStrokes > 1 && (
+            <Text style={styles.strokeCounter}>
+              Тат {currentStroke + 1}/{totalStrokes}
+            </Text>
+          )}
+        </View>
 
         {/* Letter Info Row */}
         <View style={styles.letterInfoRow}>
           <TouchableOpacity style={styles.speakerButton} onPress={playSound}>
-            <Text style={styles.speakerIcon}>🔊</Text>
+            <Text style={styles.speakerIcon}>{isPlaying ? '⏸️' : '🔊'}</Text>
           </TouchableOpacity>
           <View style={styles.letterInfo}>
-            <Text style={styles.letterDisplay}>{letter}</Text>
+            <Text style={styles.letterDisplay}>
+              {letterData.uppercase}
+              <Text style={styles.letterLowercase}>{letterData.lowercase}</Text>
+            </Text>
             <Text style={styles.letterRomanization}>{romanization}</Text>
           </View>
+        </View>
+
+        {/* Speed Control */}
+        <View style={styles.speedCard}>
+          <Text style={styles.speedLabel}>Хурд</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={20}
+            maximumValue={100}
+            value={speed}
+            onValueChange={setSpeed}
+            minimumTrackTintColor="#29B6F6"
+            maximumTrackTintColor="#E0E0E0"
+            thumbTintColor="#29B6F6"
+          />
+          <Text style={styles.speedVal}>{speedMultiplier.toFixed(1)}×</Text>
         </View>
 
         {/* Canvas */}
@@ -140,9 +213,23 @@ export default function TraceLetterScreen() {
                   strokeDasharray="5,5"
                 />
 
-                {/* Wide guide path (light gray) */}
+                {/* Show all completed strokes (faded) */}
+                {completedStrokes.map((strokeIdx) => (
+                  <Path
+                    key={`completed-${strokeIdx}`}
+                    d={letterData.strokes[strokeIdx].path}
+                    stroke="#CCCCCC"
+                    strokeWidth="8"
+                    fill="none"
+                    opacity={0.3}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                ))}
+
+                {/* Current stroke - wide guide path (light gray) */}
                 <Path
-                  d={letterData.path}
+                  d={currentStrokeData.path}
                   stroke="#CCCCCC"
                   strokeWidth="40"
                   fill="none"
@@ -151,9 +238,9 @@ export default function TraceLetterScreen() {
                   strokeLinejoin="round"
                 />
 
-                {/* Dashed blue guide path (direction indicator) */}
+                {/* Current stroke - dashed blue guide path */}
                 <Path
-                  d={letterData.path}
+                  d={currentStrokeData.path}
                   stroke="#29B6F6"
                   strokeWidth="6"
                   fill="none"
@@ -162,16 +249,16 @@ export default function TraceLetterScreen() {
                   strokeLinejoin="round"
                 />
 
-                {/* Start point - blue circle with down arrow */}
+                {/* Start point for current stroke */}
                 <Circle
-                  cx={letterData.startPoint.x}
-                  cy={letterData.startPoint.y}
+                  cx={currentStrokeData.startPoint.x}
+                  cy={currentStrokeData.startPoint.y}
                   r="15"
                   fill="#29B6F6"
                 />
                 <SvgText
-                  x={letterData.startPoint.x}
-                  y={letterData.startPoint.y + 6}
+                  x={currentStrokeData.startPoint.x}
+                  y={currentStrokeData.startPoint.y + 6}
                   fontSize="18"
                   fill="white"
                   textAnchor="middle"
@@ -179,9 +266,9 @@ export default function TraceLetterScreen() {
                   ↓
                 </SvgText>
 
-                {/* End point - blue triangle arrow */}
+                {/* End point for current stroke */}
                 <Polygon
-                  points={`${letterData.endPoint.x},${letterData.endPoint.y} ${letterData.endPoint.x - 10},${letterData.endPoint.y + 15} ${letterData.endPoint.x + 10},${letterData.endPoint.y + 15}`}
+                  points={`${currentStrokeData.endPoint.x},${currentStrokeData.endPoint.y} ${currentStrokeData.endPoint.x - 10},${currentStrokeData.endPoint.y + 15} ${currentStrokeData.endPoint.x + 10},${currentStrokeData.endPoint.y + 15}`}
                   fill="#29B6F6"
                 />
 
@@ -272,9 +359,16 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontFamily: fonts.fredoka.bold,
     color: '#000000',
-    paddingHorizontal: 20,
-    marginTop: 24,
-    marginBottom: 16,
+    flex: 1,
+  },
+  strokeCounter: {
+    fontSize: 16,
+    fontFamily: fonts.lexend.semibold,
+    color: '#29B6F6',
+    backgroundColor: '#E3F2FD',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
   },
   letterInfoRow: {
     flexDirection: 'row',
@@ -302,10 +396,43 @@ const styles = StyleSheet.create({
     fontFamily: fonts.fredoka.bold,
     color: '#000000',
   },
+  letterLowercase: {
+    fontSize: 24,
+    color: '#666666',
+  },
   letterRomanization: {
     fontSize: 16,
     fontFamily: fonts.lexend.regular,
     color: '#999999',
+  },
+  speedCard: {
+    backgroundColor: '#F8F8F8',
+    borderRadius: 16,
+    padding: 16,
+    paddingVertical: 12,
+    marginHorizontal: 20,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    ...shadows.cardSm,
+  },
+  speedLabel: {
+    fontFamily: fonts.lexend.regular,
+    fontSize: 13,
+    color: '#666',
+    width: 45,
+  },
+  slider: {
+    flex: 1,
+    height: 40,
+  },
+  speedVal: {
+    fontFamily: fonts.fredoka.semibold,
+    fontSize: 15,
+    color: '#29B6F6',
+    width: 40,
+    textAlign: 'right',
   },
   canvasContainer: {
     flex: 1,

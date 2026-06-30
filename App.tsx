@@ -26,6 +26,7 @@ import BottomNav from './src/components/BottomNav';
 import { colors, fonts } from './src/theme';
 import { tokenCache } from './src/lib/tokenCache';
 import { ChildProvider } from './src/hooks/useChild';
+import { SpeechSpeedProvider } from './src/contexts/SpeechSpeedContext';
 
 import SplashScreen from './src/screens/SplashScreen';
 import HomeScreen from './src/screens/HomeScreen';
@@ -46,6 +47,7 @@ import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import AlphabetScreen from './src/screens/AlphabetScreen';
 import TraceLetterScreen from './src/screens/TraceLetterScreen';
+import StoryDetailScreen from './src/screens/StoryDetailScreen';
 
 const Stack = createStackNavigator();
 const AuthStackNav = createStackNavigator();
@@ -84,6 +86,7 @@ function AppStack() {
       <Stack.Screen name="TextScan" component={TextScanScreen} />
       <Stack.Screen name="Alphabet" component={AlphabetScreen} />
       <Stack.Screen name="TraceLetter" component={TraceLetterScreen} />
+      <Stack.Screen name="StoryDetail" component={StoryDetailScreen} />
     </Stack.Navigator>
   );
 }
@@ -136,7 +139,9 @@ export default function App() {
             <NavigationContainer>
               <SignedIn>
                 <ChildProvider>
-                  <AppStack />
+                  <SpeechSpeedProvider>
+                    <AppStack />
+                  </SpeechSpeedProvider>
                 </ChildProvider>
               </SignedIn>
               <SignedOut>

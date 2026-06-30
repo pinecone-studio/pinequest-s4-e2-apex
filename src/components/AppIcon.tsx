@@ -23,6 +23,7 @@ const MAP = {
   arrowBack: { lib: 'ion', name: 'arrow-back' },
   settings: { lib: 'ion', name: 'settings-sharp' },
   play: { lib: 'ion', name: 'play' },
+  pause: { lib: 'ion', name: 'pause' },
   headset: { lib: 'ion', name: 'headset' },
   ear: { lib: 'mci', name: 'ear-hearing' },
   repeat: { lib: 'ion', name: 'repeat' },
