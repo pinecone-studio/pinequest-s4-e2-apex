@@ -48,6 +48,7 @@ import SignUpScreen from './src/screens/SignUpScreen';
 import AlphabetScreen from './src/screens/AlphabetScreen';
 import TraceLetterScreen from './src/screens/TraceLetterScreen';
 import StoryDetailScreen from './src/screens/StoryDetailScreen';
+import StoryQuizScreen from './src/screens/StoryQuizScreen';
 
 const Stack = createStackNavigator();
 const AuthStackNav = createStackNavigator();
@@ -87,6 +88,7 @@ function AppStack() {
       <Stack.Screen name="Alphabet" component={AlphabetScreen} />
       <Stack.Screen name="TraceLetter" component={TraceLetterScreen} />
       <Stack.Screen name="StoryDetail" component={StoryDetailScreen} />
+      <Stack.Screen name="StoryQuiz" component={StoryQuizScreen} />
     </Stack.Navigator>
   );
 }

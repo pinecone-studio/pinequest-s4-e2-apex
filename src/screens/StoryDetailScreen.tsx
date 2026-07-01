@@ -208,8 +208,11 @@ export default function StoryDetailScreen() {
     if (currentPage < totalPages - 1) {
       setCurrentPage(currentPage + 1);
     } else {
-      // Story finished
-      navigation.goBack();
+      // Story finished - go to quiz
+      (navigation as any).navigate('StoryQuiz', {
+        storyId: storyId,
+        storyTitle: story.title,
+      });
     }
   };
 
