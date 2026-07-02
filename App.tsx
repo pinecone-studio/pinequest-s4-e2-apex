@@ -21,6 +21,7 @@ import {
   Lexend_600SemiBold,
   Lexend_700Bold,
 } from '@expo-google-fonts/lexend';
+import { BadScript_400Regular } from '@expo-google-fonts/bad-script';
 
 import BottomNav from './src/components/BottomNav';
 import { colors, fonts } from './src/theme';
@@ -112,6 +113,7 @@ export default function App() {
     Lexend_500Medium,
     Lexend_600SemiBold,
     Lexend_700Bold,
+    BadScript_400Regular,
   });
 
   if (!fontsLoaded) {
