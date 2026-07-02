@@ -16,6 +16,8 @@ import {
 import { LinearGradient } from '../../rn/LinearGradient';
 import LexiBot from '../../components/LexiBot';
 import { colors, fonts, shadows } from '../../theme';
+const DEMO_USERNAME = 'togtokh';
+const DEMO_PASSWORD = 'Toogii0712$';
 
 export default function SignInScreen() {
   const router = useRouter();
@@ -83,6 +85,17 @@ export default function SignInScreen() {
               <Text style={styles.buttonText}>{loading ? 'Түр хүлээнэ үү…' : 'Нэвтрэх'}</Text>
             </Pressable>
 
+            <Pressable
+              style={styles.demoButton}
+              onPress={() => {
+                setUsername(DEMO_USERNAME);
+                setPassword(DEMO_PASSWORD);
+              }}
+              disabled={loading}
+            >
+              <Text style={styles.demoButtonText}>Демо бүртгэлээр бөглөх</Text>
+            </Pressable>
+
             <View style={styles.footer}>
               <Text style={styles.footerText}>Бүртгэлгүй юу? </Text>
               <Pressable onPress={() => router.push('/sign-up')}>
@@ -121,6 +134,15 @@ const styles = StyleSheet.create({
     ...shadows.lavender,
   },
   buttonText: { fontFamily: fonts.fredoka.semibold, fontSize: 16, color: '#fff' },
+  demoButton: {
+    borderRadius: 24,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 12,
+    borderWidth: 1.5,
+    borderColor: colors.lavender.dark,
+  },
+  demoButtonText: { fontFamily: fonts.fredoka.semibold, fontSize: 15, color: colors.lavender.dark },
   footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 20 },
   footerText: { fontFamily: fonts.lexend.regular, fontSize: 14, color: colors.warm.gray },
   footerLink: { fontFamily: fonts.lexend.semibold, fontSize: 14, color: colors.lavender.dark },
