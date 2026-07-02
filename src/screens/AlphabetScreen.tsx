@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AppIcon from "../components/AppIcon";
 import { colors, fonts, shadows } from "../theme";
 
 const WINDOW_WIDTH = Dimensions.get("window").width;
@@ -20,57 +21,56 @@ const CARD_WIDTH = (WINDOW_WIDTH - CARD_PADDING * 2 - CARD_GAP * 3) / 4;
 type LetterData = {
   upper: string;
   lower: string;
-  romanization: string;
 };
 
 const MONGOLIAN_ALPHABET: LetterData[] = [
-  { upper: "А", lower: "а", romanization: "a" },
-  { upper: "Б", lower: "б", romanization: "b" },
-  { upper: "В", lower: "в", romanization: "v" },
-  { upper: "Г", lower: "г", romanization: "g" },
-  { upper: "Д", lower: "д", romanization: "d" },
-  { upper: "Е", lower: "е", romanization: "ye" },
-  { upper: "Ё", lower: "ё", romanization: "yo" },
-  { upper: "Ж", lower: "ж", romanization: "j" },
-  { upper: "З", lower: "з", romanization: "z" },
-  { upper: "И", lower: "и", romanization: "i" },
-  { upper: "Й", lower: "й", romanization: "y" },
-  { upper: "К", lower: "к", romanization: "k" },
-  { upper: "Л", lower: "л", romanization: "l" },
-  { upper: "М", lower: "м", romanization: "m" },
-  { upper: "Н", lower: "н", romanization: "n" },
-  { upper: "О", lower: "о", romanization: "o" },
-  { upper: "Ө", lower: "ө", romanization: "ö" },
-  { upper: "П", lower: "п", romanization: "p" },
-  { upper: "Р", lower: "р", romanization: "r" },
-  { upper: "С", lower: "с", romanization: "s" },
-  { upper: "Т", lower: "т", romanization: "t" },
-  { upper: "У", lower: "у", romanization: "u" },
-  { upper: "Ү", lower: "ү", romanization: "ü" },
-  { upper: "Х", lower: "х", romanization: "kh" },
-  { upper: "Ц", lower: "ц", romanization: "ts" },
-  { upper: "Ч", lower: "ч", romanization: "ch" },
-  { upper: "Ш", lower: "ш", romanization: "sh" },
-  { upper: "Щ", lower: "щ", romanization: "shch" },
-  { upper: "Ъ", lower: "ъ", romanization: '"' },
-  { upper: "Ы", lower: "ы", romanization: "y" },
-  { upper: "Ь", lower: "ь", romanization: "'" },
-  { upper: "Э", lower: "э", romanization: "e" },
-  { upper: "Ю", lower: "ю", romanization: "yu" },
-  { upper: "Я", lower: "я", romanization: "ya" },
+  { upper: "А", lower: "а" },
+  { upper: "Б", lower: "б" },
+  { upper: "В", lower: "в" },
+  { upper: "Г", lower: "г" },
+  { upper: "Д", lower: "д" },
+  { upper: "Е", lower: "е" },
+  { upper: "Ё", lower: "ё" },
+  { upper: "Ж", lower: "ж" },
+  { upper: "З", lower: "з" },
+  { upper: "И", lower: "и" },
+  { upper: "Й", lower: "й" },
+  { upper: "К", lower: "к" },
+  { upper: "Л", lower: "л" },
+  { upper: "М", lower: "м" },
+  { upper: "Н", lower: "н" },
+  { upper: "О", lower: "о" },
+  { upper: "Ө", lower: "ө" },
+  { upper: "П", lower: "п" },
+  { upper: "Р", lower: "р" },
+  { upper: "С", lower: "с" },
+  { upper: "Т", lower: "т" },
+  { upper: "У", lower: "у" },
+  { upper: "Ү", lower: "ү" },
+  { upper: "Х", lower: "х" },
+  { upper: "Ц", lower: "ц" },
+  { upper: "Ч", lower: "ч" },
+  { upper: "Ш", lower: "ш" },
+  { upper: "Щ", lower: "щ" },
+  { upper: "Ъ", lower: "ъ" },
+  { upper: "Ы", lower: "ы" },
+  { upper: "Ь", lower: "ь" },
+  { upper: "Э", lower: "э" },
+  { upper: "Ю", lower: "ю" },
+  { upper: "Я", lower: "я" },
 ];
 
 const VOWELS: LetterData[] = [
-  { upper: "А", lower: "а", romanization: "a" },
-  { upper: "Э", lower: "э", romanization: "e" },
-  { upper: "И", lower: "и", romanization: "i" },
-  { upper: "О", lower: "о", romanization: "o" },
-  { upper: "У", lower: "у", romanization: "u" },
-  { upper: "Ү", lower: "ү", romanization: "ü" },
-  { upper: "Е", lower: "е", romanization: "ye" },
-  { upper: "Ё", lower: "ё", romanization: "yo" },
-  { upper: "Ю", lower: "ю", romanization: "yu" },
-  { upper: "Я", lower: "я", romanization: "ya" },
+  { upper: "А", lower: "а" },
+  { upper: "Э", lower: "э" },
+  { upper: "И", lower: "и" },
+  { upper: "О", lower: "о" },
+  { upper: "У", lower: "у" },
+  { upper: "Ү", lower: "ү" },
+  { upper: "Е", lower: "е" },
+  { upper: "Ё", lower: "ё" },
+  { upper: "Ю", lower: "ю" },
+  { upper: "Я", lower: "я" },
 ];
 
 const STORAGE_KEY = "@alphabet_progress";
@@ -131,7 +131,6 @@ export default function AlphabetScreen() {
           {letter.upper}
           <Text style={styles.letterLower}>{letter.lower}</Text>
         </Text>
-        <Text style={styles.romanization}>{letter.romanization}</Text>
 
         <View style={styles.progressBarContainer}>
           <View style={styles.progressBarBackground}>
@@ -151,9 +150,16 @@ export default function AlphabetScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <AppIcon name="arrowBack" size={24} color={colors.warm.text} />
+          </TouchableOpacity>
           <View style={styles.headerButton}>
             <Text style={styles.headerButtonText}>ҮСЭГ СУРАХ</Text>
           </View>
+          <View style={styles.backButton} />
         </View>
 
         <View style={styles.gridContainer}>
@@ -191,8 +197,19 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   header: {
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 24,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.warm.card,
+    alignItems: "center",
+    justifyContent: "center",
+    ...shadows.card,
   },
   headerButton: {
     backgroundColor: colors.slate.DEFAULT,
